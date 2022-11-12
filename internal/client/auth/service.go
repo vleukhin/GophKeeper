@@ -2,12 +2,6 @@ package auth
 
 import "fmt"
 
-type UserAuth interface {
-	Login(login, password string)
-	Register(login, password string)
-	Logout()
-}
-
 type Service struct {
 }
 

@@ -1,17 +1,19 @@
 package client
 
-import "github.com/vleukhin/GophKeeper/internal/client/auth"
+import (
+	"github.com/vleukhin/GophKeeper/internal/client/core"
+	"sync"
+)
 
-type Core interface {
-	auth.UserAuth
-}
+var (
+	app  *core.Core //nolint:gochecknoglobals
+	once sync.Once  //nolint:gochecknoglobals
+)
 
-type App struct {
-	*auth.Service
-}
+func GetApp() *core.Core {
+	once.Do(func() {
+		app = &core.Core{}
+	})
 
-func NewApp() *App {
-	return &App{
-		auth.NewAuthService(),
-	}
+	return app
 }
