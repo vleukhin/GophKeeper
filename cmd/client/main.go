@@ -30,7 +30,9 @@ func init() {
 	app := client.NewApp()
 	// cobra.OnInitialize(initApp)
 	commands := []*cobra.Command{
+		auth.NewRegisterCmd(app),
 		auth.NewLoginCmd(app),
+		auth.NewLogoutCmd(app),
 	}
 
 	rootCmd.AddCommand(commands...)
