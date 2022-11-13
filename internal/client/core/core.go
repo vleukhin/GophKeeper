@@ -2,6 +2,7 @@ package core
 
 import (
 	"errors"
+	"github.com/vleukhin/GophKeeper/internal/client/api"
 	"github.com/vleukhin/GophKeeper/internal/client/storage"
 	"github.com/vleukhin/GophKeeper/internal/config/client"
 	"sync"
@@ -10,9 +11,9 @@ import (
 )
 
 type Core struct {
-	repo   storage.Repo
-	client Client
-	cfg    *client.Config
+	storage storage.Repo
+	client  api.Client
+	cfg     *client.Config
 }
 
 var (
@@ -28,28 +29,28 @@ func GetApp() *Core {
 	return clientUseCase
 }
 
-type CoreOptFunc func(*Core)
+type OptFunc func(*Core)
 
-func SetRepo(r Repo) CoreOptFunc {
+func SetRepo(r storage.Repo) OptFunc {
 	return func(c *Core) {
-		c.repo = r
+		c.storage = r
 	}
 }
 
-func SetAPI(client Client) CoreOptFunc {
+func SetAPIClient(client api.Client) OptFunc {
 	return func(c *Core) {
 		c.client = client
 	}
 }
 
-func SetConfig(cfg *client.Config) CoreOptFunc {
+func SetConfig(cfg *client.Config) OptFunc {
 	return func(c *Core) {
 		c.cfg = cfg
 	}
 }
 
-func (uc *Core) InitDB() {
-	uc.repo.MigrateDB()
+func (c *Core) InitDB() {
+	c.storage.MigrateDB()
 }
 
 var (
@@ -61,7 +62,7 @@ func (c *Core) authorisationCheck(userPassword string) (string, error) {
 	if !c.verifyPassword(userPassword) {
 		return "", errPasswordCheck
 	}
-	accessToken, err := c.repo.GetSavedAccessToken()
+	accessToken, err := c.storage.GetSavedAccessToken()
 	if err != nil || accessToken == "" {
 		color.Red("User should be logged")
 

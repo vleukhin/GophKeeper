@@ -22,7 +22,7 @@ func (c *Core) StoreCard(userPassword string, card *models.Card) {
 		return
 	}
 
-	if err = c.repo.StoreCard(card); err != nil {
+	if err = c.storage.StoreCard(card); err != nil {
 		log.Fatal(err)
 	}
 
@@ -53,7 +53,7 @@ func (c *Core) loadCards(accessToken string) {
 		return
 	}
 
-	if err = c.repo.StoreCards(cards); err != nil {
+	if err = c.storage.StoreCards(cards); err != nil {
 		log.Println(err)
 
 		return
@@ -71,7 +71,7 @@ func (c *Core) ShowCard(userPassword, cardID string) {
 
 		return
 	}
-	card, err := c.repo.GetCardByID(cardUUID)
+	card, err := c.storage.GetCardByID(cardUUID)
 	if err != nil {
 		color.Red(err.Error())
 
@@ -103,12 +103,12 @@ func (c *Core) DelCard(userPassword, cardID string) {
 		log.Fatalf("Core - uuid.Parse - %v", err)
 	}
 
-	if err := c.repo.DelCard(cardUUID); err != nil {
-		log.Fatalf("Core - repo.DelCard - %v", err)
+	if err := c.storage.DelCard(cardUUID); err != nil {
+		log.Fatalf("Core - storage.DelCard - %v", err)
 	}
 
 	if err := c.client.DelCard(accessToken, cardID); err != nil {
-		log.Fatalf("Core - repo.DelCard - %v", err)
+		log.Fatalf("Core - storage.DelCard - %v", err)
 	}
 
 	color.Green("Card %q removed", cardID)
