@@ -5,10 +5,20 @@ import (
 	"github.com/vleukhin/GophKeeper/internal/client/api"
 	"github.com/vleukhin/GophKeeper/internal/client/storage"
 	"github.com/vleukhin/GophKeeper/internal/config/client"
+	"github.com/vleukhin/GophKeeper/internal/models"
 	"sync"
 
 	"github.com/fatih/color"
 )
+
+type GophKeeperClient interface {
+	InitDB()
+
+	Register(user *models.User)
+	Login(user *models.User)
+	Logout()
+	Sync(userPassword string)
+}
 
 type Core struct {
 	storage storage.Repo

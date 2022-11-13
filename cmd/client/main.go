@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/vleukhin/GophKeeper/cmd/client/auth"
-	"github.com/vleukhin/GophKeeper/internal/client"
 	"log"
 )
 
@@ -27,12 +26,10 @@ func main() {
 }
 
 func init() {
-	app := client.NewApp()
-	// cobra.OnInitialize(initApp)
 	commands := []*cobra.Command{
-		auth.NewRegisterCmd(app),
-		auth.NewLoginCmd(app),
-		auth.NewLogoutCmd(app),
+		auth.RegisterCmd,
+		auth.LoginCmd,
+		auth.LogoutCmd,
 	}
 
 	rootCmd.AddCommand(commands...)

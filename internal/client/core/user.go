@@ -5,8 +5,8 @@ import (
 
 	"github.com/fatih/color"
 
+	"github.com/vleukhin/GophKeeper/internal/helpers"
 	"github.com/vleukhin/GophKeeper/internal/models"
-	"github.com/vleukhin/GophKeeper/internal/utils"
 )
 
 func (c *Core) Login(user *models.User) {
@@ -16,28 +16,28 @@ func (c *Core) Login(user *models.User) {
 	}
 
 	if !c.storage.UserExistsByEmail(user.Email) {
-		err = c.repo.AddUser(user)
+		err = c.storage.AddUser(user)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
-	if err = uc.repo.UpdateUserToken(user, &token); err != nil {
+	if err = c.storage.UpdateUserToken(user, &token); err != nil {
 		log.Fatal(err)
 	}
 	color.Green("Got authorization token for %q", user.Email)
 }
 
 func (c *Core) Register(user *models.User) {
-	if err := uc.clientAPI.Register(user); err != nil {
+	if err := c.client.Register(user); err != nil {
 		return
 	}
-	hashedPassword, err := utils.HashPassword(user.Password)
+	hashedPassword, err := helpers.HashPassword(user.Password)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	user.Password = hashedPassword
-	if err = uc.repo.AddUser(user); err != nil {
+	if err = c.storage.AddUser(user); err != nil {
 		color.Red("Internal error: %v", err)
 
 		return
@@ -49,7 +49,7 @@ func (c *Core) Register(user *models.User) {
 }
 
 func (c *Core) Logout() {
-	if err := uc.repo.DropUserToken(); err != nil {
+	if err := c.storage.DropUserToken(); err != nil {
 		color.Red("Internal error: %v", err)
 
 		return
@@ -59,22 +59,22 @@ func (c *Core) Logout() {
 }
 
 func (c *Core) Sync(userPassword string) {
-	if !uc.verifyPassword(userPassword) {
+	if !c.verifyPassword(userPassword) {
 		return
 	}
-	accessToken, err := uc.repo.GetSavedAccessToken()
+	accessToken, err := c.storage.GetSavedAccessToken()
 	if err != nil {
 		color.Red("Internal error: %v", err)
 
 		return
 	}
-	uc.loadCards(accessToken)
-	uc.loadLogins(accessToken)
-	uc.loadNotes(accessToken)
+	c.loadCards(accessToken)
+	c.loadLogins(accessToken)
+	c.loadNotes(accessToken)
 }
 
 func (c *Core) verifyPassword(userPassword string) bool {
-	if err := utils.VerifyPassword(uc.repo.GetUserPasswordHash(), userPassword); err != nil {
+	if err := helpers.VerifyPassword(c.storage.GetUserPasswordHash(), userPassword); err != nil {
 		color.Red("Password check status: failed")
 
 		return false
