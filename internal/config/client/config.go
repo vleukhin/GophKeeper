@@ -44,7 +44,7 @@ func LoadConfig() *Config {
 
 	once.Do(func() {
 		cfg := Config{}
-		err = cleanenv.ReadConfig("./config/client/config.yml", &cfg)
+		err = cleanenv.ReadConfig("./internal/config/client/config.yml", &cfg)
 		if err != nil {
 			log.Panicln("LoadConfig - %w", err)
 		}

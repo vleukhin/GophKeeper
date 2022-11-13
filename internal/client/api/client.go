@@ -25,7 +25,7 @@ type HttpClient struct {
 	host string
 }
 
-func NewHttpClient(host string) *HttpClient {
+func NewHttpClient(host string) Client {
 	return &HttpClient{host: host}
 }
 

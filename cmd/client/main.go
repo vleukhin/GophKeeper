@@ -3,8 +3,12 @@ package main
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"github.com/vleukhin/GophKeeper/internal/client/api"
 	"github.com/vleukhin/GophKeeper/internal/client/console/auth"
 	"github.com/vleukhin/GophKeeper/internal/client/console/cards"
+	"github.com/vleukhin/GophKeeper/internal/client/core"
+	"github.com/vleukhin/GophKeeper/internal/client/storage"
+	"github.com/vleukhin/GophKeeper/internal/config/client"
 	"log"
 )
 
@@ -27,6 +31,7 @@ func main() {
 }
 
 func init() {
+	cobra.OnInitialize(initApp)
 	commands := []*cobra.Command{
 		auth.RegisterCmd,
 		auth.LoginCmd,
@@ -35,6 +40,21 @@ func init() {
 	}
 
 	rootCmd.AddCommand(commands...)
+}
+
+func initApp() {
+	cfg := client.LoadConfig()
+
+	app := core.GetApp()
+	optFuncs := []core.OptFunc{
+		core.SetAPIClient(api.NewHttpClient(cfg.Server.URL)),
+		core.SetConfig(cfg),
+		core.SetRepo(storage.NewMockStorage()),
+	}
+
+	for _, f := range optFuncs {
+		f(app)
+	}
 }
 
 func printBuildInfo() {
