@@ -68,6 +68,21 @@ var (
 	errToken         = errors.New("invalid token")
 )
 
+func (c *Core) Sync(userPassword string) {
+	if !c.verifyPassword(userPassword) {
+		return
+	}
+	token, err := c.storage.GetSavedAccessToken()
+	if err != nil {
+		color.Red("Internal error: %v", err)
+
+		return
+	}
+	c.loadCards(token)
+	//c.loadLogins(token)
+	//c.loadNotes(token)
+}
+
 func (c *Core) authorisationCheck(userPassword string) (string, error) {
 	if !c.verifyPassword(userPassword) {
 		return "", errPasswordCheck

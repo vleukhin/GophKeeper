@@ -58,21 +58,6 @@ func (c *Core) Logout() {
 	color.Green("Users tokens were dropped")
 }
 
-func (c *Core) Sync(userPassword string) {
-	if !c.verifyPassword(userPassword) {
-		return
-	}
-	accessToken, err := c.storage.GetSavedAccessToken()
-	if err != nil {
-		color.Red("Internal error: %v", err)
-
-		return
-	}
-	c.loadCards(accessToken)
-	c.loadLogins(accessToken)
-	c.loadNotes(accessToken)
-}
-
 func (c *Core) verifyPassword(userPassword string) bool {
 	if err := helpers.VerifyPassword(c.storage.GetUserPasswordHash(), userPassword); err != nil {
 		color.Red("Password check status: failed")

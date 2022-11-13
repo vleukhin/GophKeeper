@@ -1,4 +1,4 @@
-package app
+package cards
 
 import (
 	"github.com/vleukhin/GophKeeper/internal/client"

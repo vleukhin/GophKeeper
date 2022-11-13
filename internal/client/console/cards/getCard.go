@@ -1,10 +1,10 @@
-package app
+package cards
 
 import (
+	"github.com/vleukhin/GophKeeper/internal/client"
 	"log"
 
 	"github.com/spf13/cobra"
-	"github.com/vleukhin/GophKeeper/internal/client/usecase"
 )
 
 var GetCard = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
@@ -17,7 +17,7 @@ Flags:
   -i, --id string Card id
   -p, --password string   User password value.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		usecase.GetClientUseCase().ShowCard(userPassword, getCardID)
+		client.GetApp().ShowCard(userPassword, getCardID)
 	},
 }
 

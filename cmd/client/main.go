@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/vleukhin/GophKeeper/cmd/client/auth"
+	"github.com/vleukhin/GophKeeper/internal/client/console/auth"
+	"github.com/vleukhin/GophKeeper/internal/client/console/cards"
 	"log"
 )
 
@@ -30,6 +31,7 @@ func init() {
 		auth.RegisterCmd,
 		auth.LoginCmd,
 		auth.LogoutCmd,
+		cards.DelCard,
 	}
 
 	rootCmd.AddCommand(commands...)

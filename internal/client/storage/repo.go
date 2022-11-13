@@ -1,11 +1,15 @@
 package storage
 
-import "github.com/vleukhin/GophKeeper/internal/models"
+import (
+	"github.com/google/uuid"
+	"github.com/vleukhin/GophKeeper/internal/models"
+)
 
 type Repo interface {
 	MigrateDB()
 
 	UserRepo
+	CardStorage
 }
 
 type UserRepo interface {
@@ -16,4 +20,12 @@ type UserRepo interface {
 	RemoveUsers()
 	UserExistsByEmail(email string) bool
 	GetUserPasswordHash() string
+}
+
+type CardStorage interface {
+	StoreCard(*models.Card) error
+	StoreCards([]models.Card) error
+	LoadCards() []models.Card
+	GetCardByID(cardID uuid.UUID) (models.Card, error)
+	DelCard(cardID uuid.UUID) error
 }
