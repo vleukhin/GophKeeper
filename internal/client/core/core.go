@@ -2,27 +2,60 @@ package core
 
 import (
 	"errors"
-	"github.com/fatih/color"
 	"github.com/vleukhin/GophKeeper/internal/client/storage"
 	"github.com/vleukhin/GophKeeper/internal/config/client"
-	"github.com/vleukhin/GophKeeper/internal/helpers"
-)
+	"sync"
 
-var (
-	errPasswordCheck = errors.New("incorrect password")
-	errToken         = errors.New("token error")
+	"github.com/fatih/color"
 )
-
-type App interface {
-	storage.Repo
-	storage.Client
-}
 
 type Core struct {
 	repo   storage.Repo
-	client storage.Client
+	client Client
 	cfg    *client.Config
 }
+
+var (
+	clientUseCase *Core     //nolint:gochecknoglobals // pattern singleton
+	once          sync.Once //nolint:gochecknoglobals // pattern singleton
+)
+
+func GetApp() *Core {
+	once.Do(func() {
+		clientUseCase = &Core{}
+	})
+
+	return clientUseCase
+}
+
+type CoreOptFunc func(*Core)
+
+func SetRepo(r Repo) CoreOptFunc {
+	return func(c *Core) {
+		c.repo = r
+	}
+}
+
+func SetAPI(client Client) CoreOptFunc {
+	return func(c *Core) {
+		c.client = client
+	}
+}
+
+func SetConfig(cfg *client.Config) CoreOptFunc {
+	return func(c *Core) {
+		c.cfg = cfg
+	}
+}
+
+func (uc *Core) InitDB() {
+	uc.repo.MigrateDB()
+}
+
+var (
+	errPasswordCheck = errors.New("invalid password")
+	errToken         = errors.New("invalid token")
+)
 
 func (c *Core) authorisationCheck(userPassword string) (string, error) {
 	if !c.verifyPassword(userPassword) {
@@ -36,14 +69,4 @@ func (c *Core) authorisationCheck(userPassword string) (string, error) {
 	}
 
 	return accessToken, nil
-}
-
-func (с *Core) verifyPassword(userPassword string) bool {
-	if err := helpers.VerifyPassword(с.repo.GetUserPasswordHash(), userPassword); err != nil {
-		color.Red("Password check status: failed")
-
-		return false
-	}
-
-	return true
 }

@@ -100,15 +100,15 @@ func (c *Core) DelCard(userPassword, cardID string) {
 	cardUUID, err := uuid.Parse(cardID)
 	if err != nil {
 		color.Red(err.Error())
-		log.Fatalf("GophKeeperClientUseCase - uuid.Parse - %v", err)
+		log.Fatalf("Core - uuid.Parse - %v", err)
 	}
 
 	if err := c.repo.DelCard(cardUUID); err != nil {
-		log.Fatalf("GophKeeperClientUseCase - repo.DelCard - %v", err)
+		log.Fatalf("Core - repo.DelCard - %v", err)
 	}
 
 	if err := c.client.DelCard(accessToken, cardID); err != nil {
-		log.Fatalf("GophKeeperClientUseCase - repo.DelCard - %v", err)
+		log.Fatalf("Core - repo.DelCard - %v", err)
 	}
 
 	color.Green("Card %q removed", cardID)
