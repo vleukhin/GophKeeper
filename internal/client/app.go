@@ -10,7 +10,7 @@ var (
 	once sync.Once  //nolint:gochecknoglobals
 )
 
-func GetApp() *core.Core {
+func GetApp() core.GophKeeperClient {
 	once.Do(func() {
 		app = &core.Core{}
 	})

@@ -10,6 +10,7 @@ type Repo interface {
 
 	UserRepo
 	CardStorage
+	CredRepo
 }
 
 type UserRepo interface {
@@ -28,4 +29,12 @@ type CardStorage interface {
 	LoadCards() []models.Card
 	GetCardByID(cardID uuid.UUID) (models.Card, error)
 	DelCard(cardID uuid.UUID) error
+}
+
+type CredRepo interface {
+	AddCred(*models.Cred) error
+	SaveCreds([]models.Cred) error
+	LoadCreds() []models.Cred
+	GetCredByID(loginID uuid.UUID) (models.Cred, error)
+	DelCred(loginID uuid.UUID) error
 }

@@ -13,11 +13,19 @@ import (
 
 type GophKeeperClient interface {
 	InitDB()
+	Sync(userPassword string)
 
 	Register(user *models.User)
 	Login(user *models.User)
 	Logout()
-	Sync(userPassword string)
+
+	StoreCard(userPassword string, card *models.Card)
+	ShowCard(userPassword, cardID string)
+	DelCard(userPassword, cardID string)
+
+	StoreCred(userPassword string, login *models.Cred)
+	ShowCred(userPassword, loginID string)
+	DelCred(userPassword, loginID string)
 }
 
 type Core struct {

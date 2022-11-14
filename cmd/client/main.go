@@ -36,6 +36,8 @@ func init() {
 		auth.RegisterCmd,
 		auth.LoginCmd,
 		auth.LogoutCmd,
+		cards.StoreCard,
+		cards.GetCard,
 		cards.DelCard,
 	}
 

@@ -13,12 +13,26 @@ import (
 )
 
 type Client interface {
+	AuthClient
+	CardsClient
+	CredsClient
+}
+
+type AuthClient interface {
 	Login(user *models.User) (models.JWT, error)
 	Register(user *models.User) error
+}
 
+type CardsClient interface {
 	GetCards(accessToken string) ([]models.Card, error)
 	StoreCard(accessToken string, card *models.Card) error
 	DelCard(accessToken, cardID string) error
+}
+
+type CredsClient interface {
+	GetCreds(accessToken string) ([]models.Cred, error)
+	AddCred(accessToken string, login *models.Cred) error
+	DelCred(accessToken, loginID string) error
 }
 
 type HttpClient struct {

@@ -8,6 +8,26 @@ import (
 type MockStorage struct {
 }
 
+func (m MockStorage) AddCred(cred *models.Cred) error {
+	return nil
+}
+
+func (m MockStorage) SaveCreds(creds []models.Cred) error {
+	return nil
+}
+
+func (m MockStorage) LoadCreds() []models.Cred {
+	return nil
+}
+
+func (m MockStorage) GetCredByID(loginID uuid.UUID) (models.Cred, error) {
+	return models.Cred{}, nil
+}
+
+func (m MockStorage) DelCred(loginID uuid.UUID) error {
+	return nil
+}
+
 func NewMockStorage() *MockStorage {
 	return &MockStorage{}
 }
