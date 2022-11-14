@@ -11,22 +11,35 @@ import (
 	"github.com/fatih/color"
 )
 
-type GophKeeperClient interface {
-	InitDB()
-	Sync(userPassword string)
+type (
+	GophKeeperClient interface {
+		InitDB()
+		Sync(userPassword string)
+		SetRepo(r storage.Repo)
+		SetAPIClient(client api.Client)
+		SetConfig(cfg *client.Config)
 
-	Register(user *models.User)
-	Login(user *models.User)
-	Logout()
+		AuthService
+		CardsService
+		NotesService
+	}
 
-	StoreCard(userPassword string, card *models.Card)
-	ShowCard(userPassword, cardID string)
-	DelCard(userPassword, cardID string)
-
-	StoreCred(userPassword string, login *models.Cred)
-	ShowCred(userPassword, loginID string)
-	DelCred(userPassword, loginID string)
-}
+	AuthService interface {
+		Register(user *models.User)
+		Login(user *models.User)
+		Logout()
+	}
+	CardsService interface {
+		StoreCard(userPassword string, card *models.Card)
+		ShowCard(userPassword, cardID string)
+		DelCard(userPassword, cardID string)
+	}
+	NotesService interface {
+		StoreNote(userPassword string, note *models.Note)
+		ShowNote(userPassword, noteID string)
+		DelNote(userPassword, noteID string)
+	}
+)
 
 type Core struct {
 	storage storage.Repo
@@ -35,36 +48,30 @@ type Core struct {
 }
 
 var (
-	clientUseCase *Core     //nolint:gochecknoglobals // pattern singleton
-	once          sync.Once //nolint:gochecknoglobals // pattern singleton
+	core *Core     //nolint:gochecknoglobals // pattern singleton
+	once sync.Once //nolint:gochecknoglobals // pattern singleton
 )
 
-func GetApp() *Core {
+func GetApp() GophKeeperClient {
 	once.Do(func() {
-		clientUseCase = &Core{}
+		core = &Core{}
 	})
 
-	return clientUseCase
+	return core
 }
 
-type OptFunc func(*Core)
+type OptFunc func(GophKeeperClient)
 
-func SetRepo(r storage.Repo) OptFunc {
-	return func(c *Core) {
-		c.storage = r
-	}
+func (c *Core) SetRepo(r storage.Repo) {
+	c.storage = r
 }
 
-func SetAPIClient(client api.Client) OptFunc {
-	return func(c *Core) {
-		c.client = client
-	}
+func (c *Core) SetAPIClient(client api.Client) {
+	c.client = client
 }
 
-func SetConfig(cfg *client.Config) OptFunc {
-	return func(c *Core) {
-		c.cfg = cfg
-	}
+func (c *Core) SetConfig(cfg *client.Config) {
+	c.cfg = cfg
 }
 
 func (c *Core) InitDB() {

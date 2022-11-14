@@ -8,6 +8,26 @@ import (
 type MockStorage struct {
 }
 
+func (m MockStorage) LoadNotes() []models.Note {
+	return nil
+}
+
+func (m MockStorage) SaveNotes(notes []models.Note) error {
+	return nil
+}
+
+func (m MockStorage) AddNote(note *models.Note) error {
+	return nil
+}
+
+func (m MockStorage) GetNoteByID(notedID uuid.UUID) (models.Note, error) {
+	return models.Note{}, nil
+}
+
+func (m MockStorage) DelNote(noteID uuid.UUID) error {
+	return nil
+}
+
 func (m MockStorage) AddCred(cred *models.Cred) error {
 	return nil
 }

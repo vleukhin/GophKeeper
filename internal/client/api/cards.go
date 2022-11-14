@@ -2,7 +2,7 @@ package api
 
 import "github.com/vleukhin/GophKeeper/internal/models"
 
-const cardsEndpoint = "cards"
+const cardsEndpoint = "api/cards"
 
 func (c *HttpClient) GetCards(accessToken string) (cards []models.Card, err error) {
 	if err := c.getEntities(&cards, accessToken, cardsEndpoint); err != nil {

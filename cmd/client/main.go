@@ -48,15 +48,9 @@ func initApp() {
 	cfg := client.LoadConfig()
 
 	app := core.GetApp()
-	optFuncs := []core.OptFunc{
-		core.SetAPIClient(api.NewHttpClient(cfg.Server.URL)),
-		core.SetConfig(cfg),
-		core.SetRepo(storage.NewMockStorage()),
-	}
-
-	for _, f := range optFuncs {
-		f(app)
-	}
+	app.SetRepo(storage.NewMockStorage())
+	app.SetConfig(cfg)
+	app.SetAPIClient(api.NewHttpClient(cfg.Server.URL))
 }
 
 func printBuildInfo() {

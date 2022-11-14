@@ -84,7 +84,7 @@ func (c *Core) ShowCard(userPassword, cardID string) {
 		yellow(card.Name),
 		yellow(card.CardHolderName),
 		yellow(card.Number),
-		yellow(card.Brand),
+		yellow(card.Bank),
 		yellow(card.ExpirationMonth),
 		yellow(card.ExpirationYear),
 		yellow(card.SecurityCode),

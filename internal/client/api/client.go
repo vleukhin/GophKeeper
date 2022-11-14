@@ -16,6 +16,7 @@ type Client interface {
 	AuthClient
 	CardsClient
 	CredsClient
+	NoteClient
 }
 
 type AuthClient interface {
@@ -33,6 +34,12 @@ type CredsClient interface {
 	GetCreds(accessToken string) ([]models.Cred, error)
 	AddCred(accessToken string, login *models.Cred) error
 	DelCred(accessToken, loginID string) error
+}
+
+type NoteClient interface {
+	GetNotes(accessToken string) ([]models.Note, error)
+	StoreNote(accessToken string, note *models.Note) error
+	DelNote(accessToken, noteID string) error
 }
 
 type HttpClient struct {

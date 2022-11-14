@@ -16,7 +16,7 @@ var StoreCard = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
 This command store card
 Usage: storecard -p \"user_password\" 
 Flags:
-  -b, --brand string      Card brand
+  -b, --bank string       Card issuer bank
   -c, --code string       Card code
   -h, --help              help for storecard
   -m, --month string      Card expiration month
@@ -41,9 +41,9 @@ var (
 func init() {
 	StoreCard.Flags().StringVarP(&userPassword, "password", "p", "", "User password value.")
 	StoreCard.Flags().StringVarP(&card.Name, "title", "t", "", "Card title")
-	StoreCard.Flags().StringVarP(&card.Number, "number", "n", "", "Card namber")
+	StoreCard.Flags().StringVarP(&card.Number, "number", "n", "", "Card number")
 	StoreCard.Flags().StringVarP(&card.CardHolderName, "owner", "o", "", "Card holder name")
-	StoreCard.Flags().StringVarP(&card.Brand, "brand", "b", "", "Card brand")
+	StoreCard.Flags().StringVarP(&card.Bank, "bank", "b", "", "Card issuer bank")
 	StoreCard.Flags().StringVarP(&card.SecurityCode, "code", "c", "", "Card code")
 	StoreCard.Flags().StringVarP(&card.ExpirationMonth, "month", "m", "", "Card expiration month")
 	StoreCard.Flags().StringVarP(&card.ExpirationYear, "year", "y", "", "Card expiration year")

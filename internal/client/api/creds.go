@@ -4,10 +4,10 @@ import (
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
-const loginsEndpoint = "api/v1/user/logins"
+const credsEndpoint = "api/creds"
 
 func (c *HttpClient) GetCreds(accessToken string) (logins []models.Cred, err error) {
-	if err := c.getEntities(&logins, accessToken, loginsEndpoint); err != nil {
+	if err := c.getEntities(&logins, accessToken, credsEndpoint); err != nil {
 		return nil, err
 	}
 
@@ -15,9 +15,9 @@ func (c *HttpClient) GetCreds(accessToken string) (logins []models.Cred, err err
 }
 
 func (c *HttpClient) AddCred(accessToken string, login *models.Cred) error {
-	return c.addEntity(login, accessToken, loginsEndpoint)
+	return c.addEntity(login, accessToken, credsEndpoint)
 }
 
 func (c *HttpClient) DelCred(accessToken, loginID string) error {
-	return c.delEntity(accessToken, loginsEndpoint, loginID)
+	return c.delEntity(accessToken, credsEndpoint, loginID)
 }
