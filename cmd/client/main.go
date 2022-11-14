@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"github.com/vleukhin/GophKeeper/internal/client"
 	"github.com/vleukhin/GophKeeper/internal/client/api"
 	"github.com/vleukhin/GophKeeper/internal/client/console/auth"
 	"github.com/vleukhin/GophKeeper/internal/client/console/cards"
-	"github.com/vleukhin/GophKeeper/internal/client/core"
 	"github.com/vleukhin/GophKeeper/internal/client/storage"
-	"github.com/vleukhin/GophKeeper/internal/config/client"
+	config "github.com/vleukhin/GophKeeper/internal/config/client"
 	"log"
 )
 
@@ -45,10 +45,10 @@ func init() {
 }
 
 func initApp() {
-	cfg := client.LoadConfig()
+	cfg := config.LoadConfig()
 
-	app := core.GetApp()
-	app.SetRepo(storage.NewMockStorage())
+	app := client.GetApp()
+	app.SetStorage(storage.NewMockStorage())
 	app.SetConfig(cfg)
 	app.SetAPIClient(api.NewHttpClient(cfg.Server.URL))
 }

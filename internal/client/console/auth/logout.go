@@ -2,7 +2,7 @@ package auth
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/vleukhin/GophKeeper/internal/client/core"
+	"github.com/vleukhin/GophKeeper/internal/client"
 )
 
 var LogoutCmd = &cobra.Command{ //nolint:gochecknoglobals
@@ -10,6 +10,6 @@ var LogoutCmd = &cobra.Command{ //nolint:gochecknoglobals
 	Short: "Performs user logout",
 	Long:  "Performs user logout",
 	Run: func(cmd *cobra.Command, args []string) {
-		core.GetApp().Logout()
+		client.GetApp().Logout()
 	},
 }

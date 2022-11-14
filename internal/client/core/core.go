@@ -15,7 +15,7 @@ type (
 	GophKeeperClient interface {
 		InitDB()
 		Sync(userPassword string)
-		SetRepo(r storage.Repo)
+		SetStorage(r storage.Repo)
 		SetAPIClient(client api.Client)
 		SetConfig(cfg *client.Config)
 
@@ -52,17 +52,9 @@ var (
 	once sync.Once //nolint:gochecknoglobals // pattern singleton
 )
 
-func GetApp() GophKeeperClient {
-	once.Do(func() {
-		core = &Core{}
-	})
-
-	return core
-}
-
 type OptFunc func(GophKeeperClient)
 
-func (c *Core) SetRepo(r storage.Repo) {
+func (c *Core) SetStorage(r storage.Repo) {
 	c.storage = r
 }
 
