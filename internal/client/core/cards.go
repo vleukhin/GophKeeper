@@ -22,7 +22,7 @@ func (c *Core) StoreCard(userPassword string, card *models.Card) {
 		return
 	}
 
-	if err = c.storage.StoreCard(card); err != nil {
+	if err = c.storage.StoreCard(nil, *card); err != nil {
 		log.Fatal(err)
 	}
 
@@ -53,7 +53,7 @@ func (c *Core) loadCards(accessToken string) {
 		return
 	}
 
-	if err = c.storage.StoreCards(cards); err != nil {
+	if err = c.storage.StoreCards(nil, cards); err != nil {
 		log.Println(err)
 
 		return
@@ -71,7 +71,7 @@ func (c *Core) ShowCard(userPassword, cardID string) {
 
 		return
 	}
-	card, err := c.storage.GetCardByID(cardUUID)
+	card, err := c.storage.GetCardByID(nil, cardUUID)
 	if err != nil {
 		color.Red(err.Error())
 
@@ -103,7 +103,7 @@ func (c *Core) DelCard(userPassword, cardID string) {
 		log.Fatalf("Core - uuid.Parse - %v", err)
 	}
 
-	if err := c.storage.DelCard(cardUUID); err != nil {
+	if err := c.storage.DelCard(nil, cardUUID); err != nil {
 		log.Fatalf("Core - storage.DelCard - %v", err)
 	}
 

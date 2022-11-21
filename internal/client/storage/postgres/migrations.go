@@ -16,12 +16,12 @@ CREATE TABLE IF NOT EXISTS cards
     id uuid not null constraint cards_pk primary key,
     name varchar,
     card_holder_name varchar,
-    Number varchar,
-    Bank varchar,
-    ExpirationMonth varchar,
-    ExpirationYear varchar,
-    SecurityCode varchar,
-    Meta jsonb
+    number varchar,
+    bank varchar,
+    exp_month varchar,
+    exp_year varchar,
+    security_code varchar,
+    meta jsonb
 );
 `
 const createCredsTableQuery = `

@@ -25,11 +25,11 @@ type UserRepo interface {
 }
 
 type CardStorage interface {
-	StoreCard(*models.Card) error
-	StoreCards([]models.Card) error
-	LoadCards() []models.Card
-	GetCardByID(cardID uuid.UUID) (models.Card, error)
-	DelCard(cardID uuid.UUID) error
+	StoreCard(context.Context, models.Card) error
+	StoreCards(context.Context, []models.Card) error
+	LoadCards(context.Context) ([]models.Card, error)
+	GetCardByID(ctx context.Context, cardID uuid.UUID) (models.Card, error)
+	DelCard(ctx context.Context, cardID uuid.UUID) error
 }
 
 type CredRepo interface {

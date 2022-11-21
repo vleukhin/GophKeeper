@@ -81,22 +81,22 @@ func (m MockStorage) GetUserPasswordHash(context.Context, *models.User) (string,
 	return "", nil
 }
 
-func (m MockStorage) StoreCard(card *models.Card) error {
+func (m MockStorage) StoreCard(ctx context.Context, card models.Card) error {
 	return nil
 }
 
-func (m MockStorage) StoreCards(cards []models.Card) error {
+func (m MockStorage) StoreCards(ctx context.Context, cards []models.Card) error {
 	return nil
 }
 
-func (m MockStorage) LoadCards() []models.Card {
-	return nil
+func (m MockStorage) LoadCards(context.Context) ([]models.Card, error) {
+	return nil, nil
 }
 
-func (m MockStorage) GetCardByID(cardID uuid.UUID) (models.Card, error) {
+func (m MockStorage) GetCardByID(ctx context.Context, cardID uuid.UUID) (models.Card, error) {
 	return models.Card{}, nil
 }
 
-func (m MockStorage) DelCard(cardID uuid.UUID) error {
+func (m MockStorage) DelCard(ctx context.Context, cardID uuid.UUID) error {
 	return nil
 }
