@@ -37,7 +37,7 @@ func (c *Core) StoreNote(userPassword string, note *models.Note) {
 		log.Fatalf("Core - AddNote - %v", err)
 	}
 
-	if err = c.storage.AddNote(note); err != nil {
+	if err = c.storage.AddNote(nil, *note); err != nil {
 		log.Fatal(err)
 	}
 
@@ -54,7 +54,7 @@ func (c *Core) ShowNote(userPassword, noteID string) {
 
 		return
 	}
-	note, err := c.storage.GetNoteByID(noteUUID)
+	note, err := c.storage.GetNoteByID(nil, noteUUID)
 	if err != nil {
 		color.Red(err.Error())
 
@@ -90,7 +90,7 @@ func (c *Core) DelNote(userPassword, noteID string) {
 		log.Fatalf("Core - uuid.Parse - %v", err)
 	}
 
-	if err := c.storage.DelNote(noteUUID); err != nil {
+	if err := c.storage.DelNote(nil, noteUUID); err != nil {
 		log.Fatalf("Core - storage.DelNote - %v", err)
 	}
 
