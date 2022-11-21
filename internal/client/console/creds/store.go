@@ -42,7 +42,7 @@ func init() {
 	AddCred.Flags().StringVarP(&cred.Login, "cred", "l", "", "Site cred")
 	AddCred.Flags().StringVarP(&cred.Password, "secret", "s", "", "Site password|secret")
 	AddCred.Flags().StringVarP(&cred.URI, "uri", "u", "", "Site endpoint")
-	AddCred.Flags().Var(&console.JSONFlag{Target: &cred.Meta}, "meta", `Add meta fields for entity`)
+	AddCred.Flags().Var(&console.JSONFlag{Target: &cred.Meta}, "meta", `Add meta fields for models`)
 
 	if err := AddCred.MarkFlagRequired("password"); err != nil {
 		log.Fatal(err)

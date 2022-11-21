@@ -37,7 +37,7 @@ func init() {
 
 	AddNote.Flags().StringVarP(&noteForAdditing.Name, "title", "t", "", "Login title")
 	AddNote.Flags().StringVarP(&noteForAdditing.Text, "note", "n", "", "User note")
-	AddNote.Flags().Var(&console.JSONFlag{Target: &noteForAdditing.Meta}, "meta", `Add meta fields for entity`)
+	AddNote.Flags().Var(&console.JSONFlag{Target: &noteForAdditing.Meta}, "meta", `Add meta fields for models`)
 
 	if err := AddNote.MarkFlagRequired("password"); err != nil {
 		log.Fatal(err)

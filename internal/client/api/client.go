@@ -64,11 +64,11 @@ func parseServerError(body []byte) string {
 	return ""
 }
 
-func (c *HttpClient) getEntities(entity interface{}, accessToken, endpoint string) error {
+func (c *HttpClient) getEntities(models interface{}, accessToken, endpoint string) error {
 	client := resty.New()
 	client.SetAuthToken(accessToken)
 	resp, err := client.R().
-		SetResult(entity).
+		SetResult(models).
 		Get(fmt.Sprintf("%s/%s", c.host, endpoint))
 	if err != nil {
 		log.Println(err)
@@ -99,13 +99,13 @@ func (c *HttpClient) delEntity(accessToken, endpoint, id string) error {
 	return nil
 }
 
-func (c *HttpClient) addEntity(entity interface{}, accessToken, endpoint string) error {
+func (c *HttpClient) addEntity(models interface{}, accessToken, endpoint string) error {
 	client := resty.New()
 	client.SetAuthToken(accessToken)
 	resp, err := client.R().
 		SetHeader("Content-Type", "application/json").
-		SetBody(entity).
-		SetResult(entity).
+		SetBody(models).
+		SetResult(models).
 		Post(fmt.Sprintf("%s/%s", c.host, endpoint))
 	if err != nil {
 		log.Fatalf("GophKeeperClientAPI - client.R - %v ", err)

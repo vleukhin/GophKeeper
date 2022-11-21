@@ -86,8 +86,8 @@ func (c *Core) Sync(userPassword string) {
 		return
 	}
 	c.loadCards(token)
-	//c.loadLogins(token)
-	//c.loadNotes(token)
+	c.loadLogins(token)
+	c.loadNotes(token)
 }
 
 func (c *Core) authorisationCheck(userPassword string) (string, error) {
