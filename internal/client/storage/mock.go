@@ -33,23 +33,23 @@ func (m MockStorage) DelNote(noteID uuid.UUID) error {
 	return nil
 }
 
-func (m MockStorage) AddCred(cred *models.Cred) error {
+func (m MockStorage) AddCred(ctx context.Context, cred models.Cred) error {
 	return nil
 }
 
-func (m MockStorage) SaveCreds(creds []models.Cred) error {
+func (m MockStorage) SaveCreds(ctx context.Context, creds []models.Cred) error {
 	return nil
 }
 
-func (m MockStorage) LoadCreds() []models.Cred {
-	return nil
+func (m MockStorage) LoadCreds(context.Context) ([]models.Cred, error) {
+	return nil, nil
 }
 
-func (m MockStorage) GetCredByID(loginID uuid.UUID) (models.Cred, error) {
+func (m MockStorage) GetCredByID(ctx context.Context, loginID uuid.UUID) (models.Cred, error) {
 	return models.Cred{}, nil
 }
 
-func (m MockStorage) DelCred(loginID uuid.UUID) error {
+func (m MockStorage) DelCred(ctx context.Context, loginID uuid.UUID) error {
 	return nil
 }
 

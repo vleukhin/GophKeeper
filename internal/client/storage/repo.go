@@ -33,11 +33,11 @@ type CardStorage interface {
 }
 
 type CredRepo interface {
-	AddCred(*models.Cred) error
-	SaveCreds([]models.Cred) error
-	LoadCreds() []models.Cred
-	GetCredByID(loginID uuid.UUID) (models.Cred, error)
-	DelCred(loginID uuid.UUID) error
+	AddCred(context.Context, models.Cred) error
+	SaveCreds(context.Context, []models.Cred) error
+	LoadCreds(context.Context) ([]models.Cred, error)
+	GetCredByID(ctx context.Context, loginID uuid.UUID) (models.Cred, error)
+	DelCred(ctx context.Context, loginID uuid.UUID) error
 }
 
 type NotesRepo interface {
