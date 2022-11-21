@@ -13,7 +13,7 @@ type loginPayload struct {
 	Password string `json:"password"`
 }
 
-func (r *Router) SignUpUser(ctx *gin.Context) {
+func (r *Router) Register(ctx *gin.Context) {
 	var payload *loginPayload
 
 	if err := ctx.ShouldBindJSON(&payload); err != nil {
@@ -38,7 +38,7 @@ func (r *Router) SignUpUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 }
 
-func (r *Router) SignInUser(ctx *gin.Context) {
+func (r *Router) LogIn(ctx *gin.Context) {
 	var payload *loginPayload
 	if err := ctx.ShouldBindJSON(&payload); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())

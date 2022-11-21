@@ -94,11 +94,11 @@ func (c *Core) DelCred(userPassword, loginID string) {
 	}
 
 	if err := c.storage.DelCred(nil, loginUUID); err != nil {
-		log.Fatalf("Core - storage.DelLogin - %v", err)
+		log.Fatalf("Core - storage.DelCred - %v", err)
 	}
 
 	if err := c.client.DelCred(accessToken, loginID); err != nil {
-		log.Fatalf("Core - storage.DelLogin - %v", err)
+		log.Fatalf("Core - storage.DelCred - %v", err)
 	}
 
 	color.Green("Login %q removed", loginID)

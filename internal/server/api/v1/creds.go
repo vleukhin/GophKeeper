@@ -9,7 +9,7 @@ import (
 	"github.com/vleukhin/GophKeeper/internal/helpers/errs"
 )
 
-func (r *Router) GetLogins(ctx *gin.Context) {
+func (r *Router) GetCreds(ctx *gin.Context) {
 	currentUser, err := r.getUserFromCtx(ctx)
 	if err != nil {
 		errorResponse(ctx, http.StatusInternalServerError, errs.ErrUnexpectedError.Error())
@@ -29,7 +29,7 @@ func (r *Router) GetLogins(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, userLogins)
 }
 
-func (r *Router) AddLogin(ctx *gin.Context) {
+func (r *Router) AddCred(ctx *gin.Context) {
 	currentUser, err := r.getUserFromCtx(ctx)
 	if err != nil {
 		errorResponse(ctx, http.StatusInternalServerError, errs.ErrUnexpectedError.Error())
@@ -52,7 +52,7 @@ func (r *Router) AddLogin(ctx *gin.Context) {
 	ctx.JSON(http.StatusAccepted, payloadLogin)
 }
 
-func (r *Router) DelLogin(ctx *gin.Context) {
+func (r *Router) DelCred(ctx *gin.Context) {
 	loginUUID, err := uuid.Parse(ctx.Param("id"))
 	if err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
@@ -74,8 +74,8 @@ func (r *Router) DelLogin(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 }
 
-func (r *Router) UpdateLogin(ctx *gin.Context) {
-	loginUUID, err := uuid.Parse(ctx.Param("id"))
+func (r *Router) UpdateCred(ctx *gin.Context) {
+	credID, err := uuid.Parse(ctx.Param("id"))
 	if err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
@@ -89,17 +89,17 @@ func (r *Router) UpdateLogin(ctx *gin.Context) {
 		return
 	}
 
-	var payloadLogin *models.Cred
+	var cred *models.Cred
 
-	if err := ctx.ShouldBindJSON(&payloadLogin); err != nil {
+	if err := ctx.ShouldBindJSON(&cred); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
 		return
 	}
 
-	payloadLogin.ID = loginUUID
+	cred.ID = credID
 
-	if err := r.uc.UpdateLogin(ctx, payloadLogin, currentUser.ID); err != nil {
+	if err := r.uc.UpdateLogin(ctx, cred, currentUser.ID); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
 		return

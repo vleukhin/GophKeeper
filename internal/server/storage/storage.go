@@ -18,16 +18,16 @@ type (
 
 	UsersStorage interface {
 		AddUser(ctx context.Context, email, hashedPassword string) (models.User, error)
-		GetUserByEmail(ctx context.Context, email, hashedPassword string) (models.User, error)
+		GetUserByName(ctx context.Context, email, hashedPassword string) (models.User, error)
 		GetUserByID(ctx context.Context, id string) (models.User, error)
 	}
 
 	CredsStorage interface {
-		GetLogins(ctx context.Context, user models.User) ([]models.Cred, error)
-		AddLogin(ctx context.Context, login *models.Cred, userID uuid.UUID) error
-		DelLogin(ctx context.Context, loginID, userID uuid.UUID) error
-		UpdateLogin(ctx context.Context, login *models.Cred, userID uuid.UUID) error
-		IsLoginOwner(ctx context.Context, loginID, userID uuid.UUID) bool
+		GetCreds(ctx context.Context, user models.User) ([]models.Cred, error)
+		AddCred(ctx context.Context, login *models.Cred, userID uuid.UUID) error
+		DelCred(ctx context.Context, loginID, userID uuid.UUID) error
+		UpdateCred(ctx context.Context, login *models.Cred, userID uuid.UUID) error
+		IsCredOwner(ctx context.Context, loginID, userID uuid.UUID) bool
 	}
 
 	CardsStorage interface {

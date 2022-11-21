@@ -21,10 +21,10 @@ func NewRouter(e *gin.Engine, g core.GophKeeperServer, l logger.Interface) {
 
 	h.GET("me", r.ProtectedByAccessToken(), r.UserInfo)
 
-	h.GET("logins", r.ProtectedByAccessToken(), r.GetLogins)
-	h.POST("logins", r.ProtectedByAccessToken(), r.AddLogin)
-	h.DELETE("logins/:id", r.ProtectedByAccessToken(), r.DelLogin)
-	h.PATCH("logins/:id", r.ProtectedByAccessToken(), r.UpdateLogin)
+	h.GET("creds", r.ProtectedByAccessToken(), r.GetCreds)
+	h.POST("creds", r.ProtectedByAccessToken(), r.AddCred)
+	h.DELETE("creds/:id", r.ProtectedByAccessToken(), r.DelCred)
+	h.PATCH("creds/:id", r.ProtectedByAccessToken(), r.UpdateCred)
 
 	h.GET("cards", r.ProtectedByAccessToken(), r.GetCards)
 	h.POST("cards", r.ProtectedByAccessToken(), r.AddCard)
@@ -38,8 +38,8 @@ func NewRouter(e *gin.Engine, g core.GophKeeperServer, l logger.Interface) {
 
 	authAPI := h.Group("/auth")
 	{
-		authAPI.POST("/register", r.SignUpUser)
-		authAPI.POST("/login", r.SignInUser)
+		authAPI.POST("/register", r.Register)
+		authAPI.POST("/login", r.LogIn)
 		authAPI.GET("/refresh", r.RefreshAccessToken)
 		authAPI.GET("/logout", r.LogoutUser)
 	}

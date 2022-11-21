@@ -34,7 +34,7 @@ func (c *Core) SignInUser(ctx context.Context, email, password string) (token mo
 		return
 	}
 
-	user, err := c.repo.GetUserByEmail(ctx, email, password)
+	user, err := c.repo.GetUserByName(ctx, email, password)
 	if err != nil {
 		return
 	}

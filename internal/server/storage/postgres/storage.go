@@ -2,10 +2,7 @@ package postgres
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"github.com/vleukhin/GophKeeper/internal/models"
-	"github.com/vleukhin/GophKeeper/internal/server/storage"
 	"time"
 )
 
@@ -13,7 +10,7 @@ type Storage struct {
 	conn *pgxpool.Pool
 }
 
-func NewPostgresStorage(dsn string, connTimeout time.Duration) (storage.Repo, error) {
+func NewPostgresStorage(dsn string, connTimeout time.Duration) (*Storage, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), connTimeout)
 	defer cancel()
 
@@ -27,99 +24,23 @@ func NewPostgresStorage(dsn string, connTimeout time.Duration) (storage.Repo, er
 	}, nil
 }
 
-func (s Storage) Migrate(ctx context.Context) error {
+func (p Storage) Migrate(ctx context.Context) error {
+	migrations := []string{
+		createUsersTableQuery,
+		createCredsTableQuery,
+		createCardsTableQuery,
+		createNotesTableQuery,
+	}
+	for _, m := range migrations {
+		_, err := p.conn.Query(ctx, m)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
-func (s Storage) Ping(ctx context.Context) error {
-	return s.conn.Ping(ctx)
-}
-
-func (s Storage) AddUser(ctx context.Context, email, hashedPassword string) (models.User, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) GetUserByEmail(ctx context.Context, email, hashedPassword string) (models.User, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) GetUserByID(ctx context.Context, id string) (models.User, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) GetLogins(ctx context.Context, user models.User) ([]models.Cred, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) AddLogin(ctx context.Context, login *models.Cred, userID uuid.UUID) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) DelLogin(ctx context.Context, loginID, userID uuid.UUID) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) UpdateLogin(ctx context.Context, login *models.Cred, userID uuid.UUID) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) IsLoginOwner(ctx context.Context, loginID, userID uuid.UUID) bool {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) GetCards(ctx context.Context, user models.User) ([]models.Card, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) AddCard(ctx context.Context, card *models.Card, userID uuid.UUID) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) DelCard(ctx context.Context, cardUUID, userID uuid.UUID) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) UpdateCard(ctx context.Context, card *models.Card, userID uuid.UUID) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) IsCardOwner(ctx context.Context, cardUUID, userID uuid.UUID) bool {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) GetNotes(ctx context.Context, user models.User) ([]models.Note, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) AddNote(ctx context.Context, note *models.Note, userID uuid.UUID) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) DelNote(ctx context.Context, noteID, userID uuid.UUID) error {
-	//TODO implement me
-	panic("implement me")
-}
-func (s Storage) UpdateNote(ctx context.Context, note *models.Note, userID uuid.UUID) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s Storage) IsNoteOwner(ctx context.Context, noteID, userID uuid.UUID) bool {
-	//TODO implement me
-	panic("implement me")
+func (p Storage) Ping(ctx context.Context) error {
+	return p.conn.Ping(ctx)
 }
