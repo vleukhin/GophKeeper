@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"context"
 	"github.com/google/uuid"
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
@@ -52,8 +53,8 @@ func NewMockStorage() *MockStorage {
 	return &MockStorage{}
 }
 
-func (m MockStorage) MigrateDB() {
-
+func (m MockStorage) MigrateDB(context.Context) error {
+	return nil
 }
 
 func (m MockStorage) AddUser(user *models.User) error {
@@ -76,7 +77,7 @@ func (m MockStorage) RemoveUsers() {
 
 }
 
-func (m MockStorage) UserExistsByEmail(email string) bool {
+func (m MockStorage) UserExists(name string) bool {
 	return false
 }
 

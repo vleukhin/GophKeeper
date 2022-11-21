@@ -11,7 +11,7 @@ import (
 
 func (c *HttpClient) Login(user *models.User) (token models.JWT, err error) {
 	client := resty.New()
-	body := fmt.Sprintf(`{"email":%q, "password":%q}`, user.Email, user.Password)
+	body := fmt.Sprintf(`{"name":%q, "password":%q}`, user.Name, user.Password)
 	resp, err := client.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(body).
@@ -32,7 +32,7 @@ func (c *HttpClient) Login(user *models.User) (token models.JWT, err error) {
 
 func (c *HttpClient) Register(user *models.User) error {
 	client := resty.New()
-	body := fmt.Sprintf(`{"email":%q, "password":%q}`, user.Email, user.Password)
+	body := fmt.Sprintf(`{"name":%q, "password":%q}`, user.Name, user.Password)
 	resp, err := client.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(body).

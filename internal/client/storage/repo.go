@@ -1,12 +1,13 @@
 package storage
 
 import (
+	"context"
 	"github.com/google/uuid"
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
 type Repo interface {
-	MigrateDB()
+	MigrateDB(ctx context.Context) error
 
 	UserRepo
 	CardStorage
@@ -20,7 +21,7 @@ type UserRepo interface {
 	DropUserToken() error
 	GetSavedAccessToken() (string, error)
 	RemoveUsers()
-	UserExistsByEmail(email string) bool
+	UserExists(name string) bool
 	GetUserPasswordHash() string
 }
 

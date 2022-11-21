@@ -13,7 +13,7 @@ var LoginCmd = &cobra.Command{ //nolint:gochecknoglobals
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		client.GetApp().Login(&models.User{
-			Email:    args[0],
+			Name:     args[0],
 			Password: args[1],
 		})
 	},

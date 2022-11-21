@@ -1,19 +1,18 @@
 package core
 
 import (
+	"context"
 	"errors"
+	"github.com/fatih/color"
 	"github.com/vleukhin/GophKeeper/internal/client/api"
 	"github.com/vleukhin/GophKeeper/internal/client/storage"
 	"github.com/vleukhin/GophKeeper/internal/config/client"
 	"github.com/vleukhin/GophKeeper/internal/models"
-	"sync"
-
-	"github.com/fatih/color"
 )
 
 type (
 	GophKeeperClient interface {
-		InitDB()
+		InitDB(ctx context.Context) error
 		Sync(userPassword string)
 		SetStorage(r storage.Repo)
 		SetAPIClient(client api.Client)
@@ -47,11 +46,6 @@ type Core struct {
 	cfg     *client.Config
 }
 
-var (
-	core *Core     //nolint:gochecknoglobals // pattern singleton
-	once sync.Once //nolint:gochecknoglobals // pattern singleton
-)
-
 type OptFunc func(GophKeeperClient)
 
 func (c *Core) SetStorage(r storage.Repo) {
@@ -66,8 +60,8 @@ func (c *Core) SetConfig(cfg *client.Config) {
 	c.cfg = cfg
 }
 
-func (c *Core) InitDB() {
-	c.storage.MigrateDB()
+func (c *Core) InitDB(ctx context.Context) error {
+	return c.storage.MigrateDB(ctx)
 }
 
 var (

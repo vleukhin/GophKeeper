@@ -15,7 +15,7 @@ func (c *Core) Login(user *models.User) {
 		return
 	}
 
-	if !c.storage.UserExistsByEmail(user.Email) {
+	if !c.storage.UserExists(user.Name) {
 		err = c.storage.AddUser(user)
 		if err != nil {
 			log.Fatal(err)
@@ -24,7 +24,7 @@ func (c *Core) Login(user *models.User) {
 	if err = c.storage.UpdateUserToken(user, &token); err != nil {
 		log.Fatal(err)
 	}
-	color.Green("Got authorization token for %q", user.Email)
+	color.Green("Got authorization token for %q", user.Name)
 }
 
 func (c *Core) Register(user *models.User) {
@@ -45,7 +45,7 @@ func (c *Core) Register(user *models.User) {
 
 	color.Green("User registered")
 	color.Green("ID: %v", user.ID)
-	color.Green("Email: %s", user.Email)
+	color.Green("Name: %s", user.Name)
 }
 
 func (c *Core) Logout() {

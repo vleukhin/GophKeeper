@@ -4,7 +4,7 @@ import "github.com/google/uuid"
 
 type User struct {
 	ID       uuid.UUID `json:"uuid"`
-	Email    string    `json:"email"`
+	Name     string    `json:"name"`
 	Password string    `json:"-"`
 }
 
@@ -17,9 +17,9 @@ type JWT struct {
 }
 
 type Card struct {
-	ID              uuid.UUID `json:"uuid" swaggerignore:"true"`
+	ID              uuid.UUID `json:"uuid"`
 	Name            string    `json:"name"`
-	CardHolderName  string    `json:"card_holder_hame"`
+	CardHolderName  string    `json:"card_holder_name"`
 	Number          string    `json:"number"`
 	Bank            string    `json:"bank"`
 	ExpirationMonth string    `json:"expiration_month"`
@@ -38,14 +38,14 @@ type Cred struct {
 }
 
 type Note struct {
-	ID   uuid.UUID `json:"uuid" swaggerignore:"true"`
+	ID   uuid.UUID `json:"uuid"`
 	Name string    `json:"name"`
 	Text string    `json:"text"`
 	Meta []Meta    `json:"meta"`
 }
 
 type Meta struct {
-	ID    uuid.UUID `json:"uuid" swaggerignore:"true"`
+	ID    uuid.UUID `json:"uuid"`
 	Name  string    `json:"name"`
 	Value string    `json:"value"`
 }
