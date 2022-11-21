@@ -12,7 +12,7 @@ type (
 		App     `yaml:"app"`
 		Server  `yaml:"server"`
 		Log     `yaml:"logger"`
-		Storage `yaml:"sqlite"`
+		Storage `yaml:"storage"`
 	}
 
 	App struct {
@@ -29,10 +29,10 @@ type (
 	}
 
 	Storage struct {
-		Driver   string `yaml:"driver"`
+		Driver   string `yaml:"driver" env:"STORAGE_DRIVER"`
 		Postgres struct {
-			DSN string `yaml:"DSN"`
-		}
+			DSN string `yaml:"DSN" env:"POSTGRES_DSN"`
+		} `yaml:"postgres"`
 	}
 )
 
@@ -49,12 +49,12 @@ func LoadConfig() *Config {
 		cfg := Config{}
 		err = cleanenv.ReadConfig("./internal/config/client/config.yml", &cfg)
 		if err != nil {
-			log.Panicln("LoadConfig - %w", err)
+			log.Fatalf("LoadConfig - %s", err)
 		}
 
 		err = cleanenv.ReadEnv(&cfg)
 		if err != nil {
-			log.Panicln("LoadConfig - %w", err)
+			log.Fatalf("LoadConfig - %s", err)
 		}
 		currentConfig = &cfg
 	})

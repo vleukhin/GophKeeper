@@ -57,32 +57,28 @@ func (m MockStorage) MigrateDB(context.Context) error {
 	return nil
 }
 
-func (m MockStorage) AddUser(user *models.User) error {
+func (m MockStorage) AddUser(ctx context.Context, name string, password string) error {
 	return nil
 }
 
-func (m MockStorage) UpdateUserToken(user *models.User, token *models.JWT) error {
+func (m MockStorage) UpdateUserToken(ctx context.Context, user *models.User, token *models.JWT) error {
 	return nil
 }
 
-func (m MockStorage) DropUserToken() error {
+func (m MockStorage) DropUserToken(context.Context, *models.User) error {
 	return nil
 }
 
-func (m MockStorage) GetSavedAccessToken() (string, error) {
+func (m MockStorage) GetAccessToken(context.Context, *models.User) (string, error) {
 	return "", nil
 }
 
-func (m MockStorage) RemoveUsers() {
-
+func (m MockStorage) UserExists(ctx context.Context, name string) (bool, error) {
+	return false, nil
 }
 
-func (m MockStorage) UserExists(name string) bool {
-	return false
-}
-
-func (m MockStorage) GetUserPasswordHash() string {
-	return ""
+func (m MockStorage) GetUserPasswordHash(context.Context, *models.User) (string, error) {
+	return "", nil
 }
 
 func (m MockStorage) StoreCard(card *models.Card) error {

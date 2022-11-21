@@ -10,6 +10,6 @@ logger:
   rollbar_env: 'gophkeeper-client'
 
 storage:
-  driver: mock
+  driver: postgres
   postgres:
-    dsn: 'postgres://postgres:postgres@postgres:5454/gophkeeper?sslmode=disable'
+    DSN: 'postgres://postgres:postgres@localhost:5454/gophkeeper?sslmode=disable'

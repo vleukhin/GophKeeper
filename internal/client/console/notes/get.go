@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/vleukhin/GophKeeper/internal/client/core"
+	"github.com/vleukhin/GophKeeper/internal/client"
 	"log"
 
 	"github.com/spf13/cobra"
@@ -17,7 +17,7 @@ Flags:
   -i, --id string Text id
   -p, --password string   User password value.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		core.GetApp().ShowNote(userPassword, getNoteID)
+		client.GetApp().ShowNote(userPassword, getNoteID)
 	},
 }
 

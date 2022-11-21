@@ -1,8 +1,8 @@
 package app
 
 import (
+	"github.com/vleukhin/GophKeeper/internal/client"
 	"github.com/vleukhin/GophKeeper/internal/client/console"
-	"github.com/vleukhin/GophKeeper/internal/client/core"
 	"github.com/vleukhin/GophKeeper/internal/models"
 	"log"
 
@@ -23,7 +23,7 @@ Flags:
   example: -meta'[{"name":"some_meta","value":"some_meta_value"},{"name":"some_meta2","value":"some_meta_value2"}]'
   `,
 	Run: func(cmd *cobra.Command, args []string) {
-		core.GetApp().StoreNote(userPassword, &noteForAdditing)
+		client.GetApp().StoreNote(userPassword, &noteForAdditing)
 	},
 }
 

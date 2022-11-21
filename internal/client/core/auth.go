@@ -1,6 +1,7 @@
 package core
 
 import (
+	"context"
 	"log"
 
 	"github.com/fatih/color"
@@ -10,18 +11,24 @@ import (
 )
 
 func (c *Core) Login(user *models.User) {
+	ctx := context.TODO()
 	token, err := c.client.Login(user)
 	if err != nil {
 		return
 	}
 
-	if !c.storage.UserExists(user.Name) {
-		err = c.storage.AddUser(user)
+	exists, err := c.storage.UserExists(ctx, user.Name)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	if !exists {
+		err = c.storage.AddUser(ctx, user.Name, user.Password)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
-	if err = c.storage.UpdateUserToken(user, &token); err != nil {
+	if err = c.storage.UpdateUserToken(ctx, user, &token); err != nil {
 		log.Fatal(err)
 	}
 	color.Green("Got authorization token for %q", user.Name)
@@ -37,7 +44,7 @@ func (c *Core) Register(user *models.User) {
 	}
 
 	user.Password = hashedPassword
-	if err = c.storage.AddUser(user); err != nil {
+	if err = c.storage.AddUser(nil, "", ""); err != nil {
 		color.Red("Internal error: %v", err)
 
 		return
@@ -49,7 +56,7 @@ func (c *Core) Register(user *models.User) {
 }
 
 func (c *Core) Logout() {
-	if err := c.storage.DropUserToken(); err != nil {
+	if err := c.storage.DropUserToken(nil, nil); err != nil {
 		color.Red("Internal error: %v", err)
 
 		return
@@ -59,7 +66,12 @@ func (c *Core) Logout() {
 }
 
 func (c *Core) verifyPassword(userPassword string) bool {
-	if err := helpers.VerifyPassword(c.storage.GetUserPasswordHash(), userPassword); err != nil {
+	hash, err := c.storage.GetUserPasswordHash(nil, nil)
+	if err != nil {
+		log.Println(err.Error())
+		return false
+	}
+	if err := helpers.VerifyPassword(hash, userPassword); err != nil {
 		color.Red("Password check status: failed")
 
 		return false
