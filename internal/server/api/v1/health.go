@@ -7,12 +7,10 @@ import (
 )
 
 func (r *Router) HealthCheck(ctx *gin.Context) {
-	err := r.uc.HealthCheck()
+	err := r.uc.HealthCheck(ctx)
 	if err != nil {
 		errorResponse(ctx, http.StatusInternalServerError, err.Error())
 
 		return
 	}
-
-	ctx.JSON(http.StatusOK, gin.H{"status": "connected"})
 }

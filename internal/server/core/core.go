@@ -9,10 +9,8 @@ import (
 	"github.com/vleukhin/GophKeeper/internal/server/storage"
 )
 
-const minutesPerHour = 60
-
 type GophKeeperServer interface {
-	HealthCheck() error
+	HealthCheck(context.Context) error
 	SignUpUser(ctx context.Context, email, password string) (models.User, error)
 	SignInUser(ctx context.Context, email, password string) (models.JWT, error)
 	RefreshAccessToken(ctx context.Context, refreshToken string) (models.JWT, error)
@@ -49,8 +47,8 @@ func New(r storage.Repo, cfg *config.Config, l *logger.Logger) *Core {
 	}
 }
 
-func (c *Core) HealthCheck() error {
-	return c.repo.Ping()
+func (c *Core) HealthCheck(ctx context.Context) error {
+	return c.repo.Ping(ctx)
 }
 
 func (c *Core) GetDomainName() string {

@@ -31,9 +31,8 @@ func (s Storage) Migrate(ctx context.Context) error {
 	return nil
 }
 
-func (s Storage) Ping() error {
-	//TODO implement me
-	panic("implement me")
+func (s Storage) Ping(ctx context.Context) error {
+	return s.conn.Ping(ctx)
 }
 
 func (s Storage) AddUser(ctx context.Context, email, hashedPassword string) (models.User, error) {

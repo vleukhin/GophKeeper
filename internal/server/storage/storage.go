@@ -8,7 +8,7 @@ import (
 
 type (
 	Repo interface {
-		Ping() error
+		Ping(context.Context) error
 		Migrate(ctx context.Context) error
 		UsersStorage
 		CredsStorage

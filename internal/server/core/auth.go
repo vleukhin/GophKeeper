@@ -10,6 +10,8 @@ import (
 	"github.com/vleukhin/GophKeeper/internal/helpers/errs"
 )
 
+const minutesPerHour = 60
+
 func (c *Core) SignUpUser(ctx context.Context, email, password string) (user models.User, err error) {
 	if _, err = mail.ParseAddress(email); err != nil {
 		err = errs.ErrWrongEmail
