@@ -9,5 +9,7 @@ logger:
   log_level: 'debug'
   rollbar_env: 'gophkeeper-client'
 
-sqlite:
-  sqlite_dsn: 'gophkeeper.sqlite'
+storage:
+  driver: mock
+  postgres:
+    dsn: 'postgres://postgres:postgres@postgres:5454/gophkeeper?sslmode=disable'

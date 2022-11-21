@@ -9,6 +9,10 @@ import (
 type MockStorage struct {
 }
 
+func NewMockStorage() *MockStorage {
+	return &MockStorage{}
+}
+
 func (m MockStorage) LoadNotes() []models.Note {
 	return nil
 }
@@ -47,10 +51,6 @@ func (m MockStorage) GetCredByID(loginID uuid.UUID) (models.Cred, error) {
 
 func (m MockStorage) DelCred(loginID uuid.UUID) error {
 	return nil
-}
-
-func NewMockStorage() *MockStorage {
-	return &MockStorage{}
 }
 
 func (m MockStorage) MigrateDB(context.Context) error {

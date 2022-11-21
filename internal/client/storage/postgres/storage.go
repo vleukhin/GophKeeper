@@ -43,6 +43,13 @@ func (p Storage) MigrateDB(ctx context.Context) error {
 	return nil
 }
 
+const createUserQuery = `
+	INSERT INTO users (name, type, value)
+	VALUES ($1, $2, $3)
+	ON CONFLICT ON CONSTRAINT metrics_name_key DO UPDATE
+	SET value = excluded.value
+`
+
 func (p Storage) AddUser(user *models.User) error {
 	//TODO implement me
 	panic("implement me")

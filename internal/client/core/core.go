@@ -21,6 +21,7 @@ type (
 		AuthService
 		CardsService
 		NotesService
+		CredService
 	}
 
 	AuthService interface {
@@ -37,6 +38,11 @@ type (
 		StoreNote(userPassword string, note *models.Note)
 		ShowNote(userPassword, noteID string)
 		DelNote(userPassword, noteID string)
+	}
+	CredService interface {
+		StoreCred(userPassword string, login *models.Cred)
+		ShowCred(userPassword, loginID string)
+		DelCred(userPassword, loginID string)
 	}
 )
 

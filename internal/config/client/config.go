@@ -9,10 +9,10 @@ import (
 
 type (
 	Config struct {
-		App    `yaml:"app"`
-		Server `yaml:"server"`
-		Log    `yaml:"logger"`
-		SQLite `yaml:"sqlite"`
+		App     `yaml:"app"`
+		Server  `yaml:"server"`
+		Log     `yaml:"logger"`
+		Storage `yaml:"sqlite"`
 	}
 
 	App struct {
@@ -28,8 +28,11 @@ type (
 		Level string `yaml:"log_level"   env:"LOG_LEVEL"`
 	}
 
-	SQLite struct {
-		DSN string `yaml:"sqlite_dsn" env:"SQLITE_DSN"`
+	Storage struct {
+		Driver   string `yaml:"driver"`
+		Postgres struct {
+			DSN string `yaml:"DSN"`
+		}
 	}
 )
 

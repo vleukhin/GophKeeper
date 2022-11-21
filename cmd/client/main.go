@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/vleukhin/GophKeeper/internal/client"
@@ -8,8 +9,10 @@ import (
 	"github.com/vleukhin/GophKeeper/internal/client/console/auth"
 	"github.com/vleukhin/GophKeeper/internal/client/console/cards"
 	"github.com/vleukhin/GophKeeper/internal/client/storage"
+	"github.com/vleukhin/GophKeeper/internal/client/storage/postgres"
 	config "github.com/vleukhin/GophKeeper/internal/config/client"
 	"log"
+	"time"
 )
 
 var buildVersion = "N/A"
@@ -45,12 +48,30 @@ func init() {
 }
 
 func initApp() {
+	var repo storage.Repo
+	var err error
 	cfg := config.LoadConfig()
 
+	switch cfg.Storage.Driver {
+	case "mock":
+		repo = storage.NewMockStorage()
+	case "postgres":
+		repo, err = postgres.NewPostgresStorage(cfg.Postgres.DSN, time.Second*5)
+		if err != nil {
+			log.Fatal(err)
+		}
+	default:
+		log.Fatal("Unknown storage driver")
+	}
+
 	app := client.GetApp()
-	app.SetStorage(storage.NewMockStorage())
+	app.SetStorage(repo)
 	app.SetConfig(cfg)
 	app.SetAPIClient(api.NewHttpClient(cfg.Server.URL))
+	err = app.InitDB(context.TODO())
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }
 
 func printBuildInfo() {
