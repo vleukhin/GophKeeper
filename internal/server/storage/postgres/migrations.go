@@ -12,6 +12,7 @@ const createCardsTableQuery = `
 CREATE TABLE IF NOT EXISTS cards
 (
     id uuid not null constraint cards_pk primary key,
+    user_id uuid,
     name varchar,
     card_holder_name varchar,
     number varchar,
@@ -26,6 +27,7 @@ const createCredsTableQuery = `
 CREATE TABLE IF NOT EXISTS creds
 (
     id uuid not null constraint creds_pk primary key,
+    user_id uuid,
     name varchar,
     login varchar,
     password varchar,
@@ -36,6 +38,7 @@ const createNotesTableQuery = `
 CREATE TABLE IF NOT EXISTS notes
 (
     id uuid not null constraint notes_pk primary key,
+    user_id uuid,
     name varchar,
     text varchar,
     Meta jsonb
