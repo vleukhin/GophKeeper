@@ -44,7 +44,7 @@ func (c *Core) Register(user *models.User) {
 	}
 
 	user.Password = hashedPassword
-	if err = c.storage.AddUser(context.TODO(), "", ""); err != nil {
+	if err = c.storage.AddUser(context.TODO(), user.Name, hashedPassword); err != nil {
 		color.Red("Internal error: %v", err)
 
 		return

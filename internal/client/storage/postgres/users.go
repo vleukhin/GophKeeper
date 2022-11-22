@@ -6,7 +6,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4"
 
-	"github.com/vleukhin/GophKeeper/internal/helpers"
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
@@ -16,15 +15,11 @@ const createUserQuery = `
 `
 
 func (p Storage) AddUser(ctx context.Context, name string, password string) error {
-	hPassword, err := helpers.HashPassword(password)
-	if err != nil {
-		return err
-	}
 	id, err := uuid.NewUUID()
 	if err != nil {
 		return err
 	}
-	_, err = p.conn.Exec(ctx, createUserQuery, id, name, hPassword)
+	_, err = p.conn.Exec(ctx, createUserQuery, id, name, password)
 	if err != nil {
 		return err
 	}

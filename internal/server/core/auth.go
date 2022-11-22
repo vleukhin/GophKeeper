@@ -3,8 +3,6 @@ package core
 import (
 	"context"
 	"fmt"
-	"net/mail"
-
 	"github.com/vleukhin/GophKeeper/internal/helpers"
 	"github.com/vleukhin/GophKeeper/internal/models"
 
@@ -14,12 +12,6 @@ import (
 const minutesPerHour = 60
 
 func (c *Core) SignUpUser(ctx context.Context, email, password string) (user models.User, err error) {
-	if _, err = mail.ParseAddress(email); err != nil {
-		err = errs.ErrWrongEmail
-
-		return
-	}
-
 	hashedPassword, err := helpers.HashPassword(password)
 	if err != nil {
 		return
@@ -29,12 +21,6 @@ func (c *Core) SignUpUser(ctx context.Context, email, password string) (user mod
 }
 
 func (c *Core) SignInUser(ctx context.Context, email, password string) (token models.JWT, err error) {
-	if _, err = mail.ParseAddress(email); err != nil {
-		err = errs.ErrWrongEmail
-
-		return
-	}
-
 	user, err := c.repo.GetUserByName(ctx, email, password)
 	if err != nil {
 		return

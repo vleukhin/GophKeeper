@@ -1,4 +1,4 @@
-package v1
+package api
 
 import (
 	"github.com/gin-gonic/gin"
@@ -13,7 +13,7 @@ type Router struct {
 }
 
 func NewRouter(e *gin.Engine, g core.GophKeeperServer, l logger.Interface) {
-	h := e.Group("/api/v1")
+	h := e.Group("/api")
 
 	r := &Router{g, l}
 

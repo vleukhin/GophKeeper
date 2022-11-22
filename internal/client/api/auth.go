@@ -18,7 +18,7 @@ func (c *HTTPClient) Login(user *models.User) (token models.JWT, err error) {
 		SetHeader("Content-Type", "application/json").
 		SetBody(body).
 		SetResult(&token).
-		Post(fmt.Sprintf("%s/api/login", c.host))
+		Post(fmt.Sprintf("%s/api/auth/login", c.host))
 	if err != nil {
 		return
 	}
@@ -39,14 +39,14 @@ func (c *HTTPClient) Register(user *models.User) error {
 		SetHeader("Content-Type", "application/json").
 		SetBody(body).
 		SetResult(user).
-		Post(fmt.Sprintf("%s/api/register", c.host))
+		Post(fmt.Sprintf("%s/api/auth/register", c.host))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if resp.StatusCode() == http.StatusBadRequest || resp.StatusCode() == http.StatusInternalServerError {
+	if resp.StatusCode() != http.StatusOK {
 		errMessage := parseServerError(resp.Body())
-		color.Red("Server error: %s", errMessage)
+		color.Red("Server error: %s \nStatus code: %d", errMessage, resp.StatusCode())
 
 		return errServer
 	}

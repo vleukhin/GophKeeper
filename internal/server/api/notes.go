@@ -1,4 +1,4 @@
-package v1
+package api
 
 import (
 	"net/http"
@@ -11,51 +11,51 @@ import (
 	"github.com/vleukhin/GophKeeper/internal/helpers/errs"
 )
 
-func (r *Router) GetCreds(ctx *gin.Context) {
+func (r *Router) GetNotes(ctx *gin.Context) {
 	currentUser, err := r.getUserFromCtx(ctx)
 	if err != nil {
 		errorResponse(ctx, http.StatusInternalServerError, errs.ErrUnexpectedError.Error())
 	}
 
-	userLogins, err := r.uc.GetLogins(ctx, currentUser)
+	userNotes, err := r.uc.GetNotes(ctx, currentUser)
 	if err != nil {
 		errorResponse(ctx, http.StatusInternalServerError, err.Error())
 	}
 
-	if len(userLogins) == 0 {
+	if len(userNotes) == 0 {
 		ctx.Status(http.StatusNoContent)
 
 		return
 	}
 
-	ctx.JSON(http.StatusOK, userLogins)
+	ctx.JSON(http.StatusOK, userNotes)
 }
 
-func (r *Router) AddCred(ctx *gin.Context) {
+func (r *Router) AddNote(ctx *gin.Context) {
 	currentUser, err := r.getUserFromCtx(ctx)
 	if err != nil {
 		errorResponse(ctx, http.StatusInternalServerError, errs.ErrUnexpectedError.Error())
 	}
 
-	var payloadLogin *models.Cred
+	var payloadNote *models.Note
 
-	if err := ctx.ShouldBindJSON(&payloadLogin); err != nil {
+	if err := ctx.ShouldBindJSON(&payloadNote); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
 		return
 	}
 
-	if err := r.uc.AddLogin(ctx, payloadLogin, currentUser.ID); err != nil {
+	if err := r.uc.AddNote(ctx, payloadNote, currentUser.ID); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
 		return
 	}
 
-	ctx.JSON(http.StatusAccepted, payloadLogin)
+	ctx.JSON(http.StatusAccepted, payloadNote)
 }
 
-func (r *Router) DelCred(ctx *gin.Context) {
-	loginUUID, err := uuid.Parse(ctx.Param("id"))
+func (r *Router) DelNote(ctx *gin.Context) {
+	noteUUID, err := uuid.Parse(ctx.Param("id"))
 	if err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
@@ -67,7 +67,7 @@ func (r *Router) DelCred(ctx *gin.Context) {
 		errorResponse(ctx, http.StatusInternalServerError, errs.ErrUnexpectedError.Error())
 	}
 
-	if err := r.uc.DelLogin(ctx, loginUUID, currentUser.ID); err != nil {
+	if err := r.uc.DelNote(ctx, noteUUID, currentUser.ID); err != nil {
 		errorResponse(ctx, http.StatusInternalServerError, err.Error())
 
 		return
@@ -76,8 +76,8 @@ func (r *Router) DelCred(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 }
 
-func (r *Router) UpdateCred(ctx *gin.Context) {
-	credID, err := uuid.Parse(ctx.Param("id"))
+func (r *Router) UpdateNote(ctx *gin.Context) {
+	noteUUID, err := uuid.Parse(ctx.Param("id"))
 	if err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
@@ -91,17 +91,17 @@ func (r *Router) UpdateCred(ctx *gin.Context) {
 		return
 	}
 
-	var cred *models.Cred
+	var payloadNote *models.Note
 
-	if err := ctx.ShouldBindJSON(&cred); err != nil {
+	if err := ctx.ShouldBindJSON(&payloadNote); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
 		return
 	}
 
-	cred.ID = credID
+	payloadNote.ID = noteUUID
 
-	if err := r.uc.UpdateLogin(ctx, cred, currentUser.ID); err != nil {
+	if err := r.uc.UpdateNote(ctx, payloadNote, currentUser.ID); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
 		return

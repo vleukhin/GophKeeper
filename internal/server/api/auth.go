@@ -1,4 +1,4 @@
-package v1
+package api
 
 import (
 	"errors"
@@ -26,12 +26,6 @@ func (r *Router) Register(ctx *gin.Context) {
 	user, err := r.uc.SignUpUser(ctx, payload.Name, payload.Password)
 	if err == nil {
 		ctx.JSON(http.StatusCreated, user)
-
-		return
-	}
-
-	if errors.Is(err, errs.ErrWrongEmail) || errors.Is(err, errs.ErrEmailAlreadyExists) {
-		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
 		return
 	}

@@ -3,12 +3,12 @@ package server
 import (
 	"context"
 	"fmt"
+	v1 "github.com/vleukhin/GophKeeper/internal/server/api"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
-	v1 "github.com/vleukhin/GophKeeper/internal/server/api/v1"
 	"github.com/vleukhin/GophKeeper/internal/server/storage/postgres"
 
 	"github.com/gin-gonic/gin"

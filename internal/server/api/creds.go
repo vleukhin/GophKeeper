@@ -1,4 +1,4 @@
-package v1
+package api
 
 import (
 	"net/http"
@@ -11,51 +11,51 @@ import (
 	"github.com/vleukhin/GophKeeper/internal/helpers/errs"
 )
 
-func (r *Router) GetCards(ctx *gin.Context) {
+func (r *Router) GetCreds(ctx *gin.Context) {
 	currentUser, err := r.getUserFromCtx(ctx)
 	if err != nil {
 		errorResponse(ctx, http.StatusInternalServerError, errs.ErrUnexpectedError.Error())
 	}
 
-	userCards, err := r.uc.GetCards(ctx, currentUser)
+	userLogins, err := r.uc.GetLogins(ctx, currentUser)
 	if err != nil {
 		errorResponse(ctx, http.StatusInternalServerError, err.Error())
 	}
 
-	if len(userCards) == 0 {
+	if len(userLogins) == 0 {
 		ctx.Status(http.StatusNoContent)
 
 		return
 	}
 
-	ctx.JSON(http.StatusOK, userCards)
+	ctx.JSON(http.StatusOK, userLogins)
 }
 
-func (r *Router) AddCard(ctx *gin.Context) {
+func (r *Router) AddCred(ctx *gin.Context) {
 	currentUser, err := r.getUserFromCtx(ctx)
 	if err != nil {
 		errorResponse(ctx, http.StatusInternalServerError, errs.ErrUnexpectedError.Error())
 	}
 
-	var payloadCard *models.Card
+	var payloadLogin *models.Cred
 
-	if err := ctx.ShouldBindJSON(&payloadCard); err != nil {
+	if err := ctx.ShouldBindJSON(&payloadLogin); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
 		return
 	}
 
-	if err := r.uc.AddCard(ctx, payloadCard, currentUser.ID); err != nil {
+	if err := r.uc.AddLogin(ctx, payloadLogin, currentUser.ID); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
 		return
 	}
 
-	ctx.JSON(http.StatusAccepted, payloadCard)
+	ctx.JSON(http.StatusAccepted, payloadLogin)
 }
 
-func (r *Router) DelCard(ctx *gin.Context) {
-	cardUUID, err := uuid.Parse(ctx.Param("id"))
+func (r *Router) DelCred(ctx *gin.Context) {
+	loginUUID, err := uuid.Parse(ctx.Param("id"))
 	if err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
@@ -67,7 +67,7 @@ func (r *Router) DelCard(ctx *gin.Context) {
 		errorResponse(ctx, http.StatusInternalServerError, errs.ErrUnexpectedError.Error())
 	}
 
-	if err := r.uc.DelCard(ctx, cardUUID, currentUser.ID); err != nil {
+	if err := r.uc.DelLogin(ctx, loginUUID, currentUser.ID); err != nil {
 		errorResponse(ctx, http.StatusInternalServerError, err.Error())
 
 		return
@@ -76,8 +76,8 @@ func (r *Router) DelCard(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 }
 
-func (r *Router) UpdateCard(ctx *gin.Context) {
-	cardUUID, err := uuid.Parse(ctx.Param("id"))
+func (r *Router) UpdateCred(ctx *gin.Context) {
+	credID, err := uuid.Parse(ctx.Param("id"))
 	if err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
@@ -91,17 +91,17 @@ func (r *Router) UpdateCard(ctx *gin.Context) {
 		return
 	}
 
-	var payloadCard *models.Card
+	var cred *models.Cred
 
-	if err := ctx.ShouldBindJSON(&payloadCard); err != nil {
+	if err := ctx.ShouldBindJSON(&cred); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
 		return
 	}
 
-	payloadCard.ID = cardUUID
+	cred.ID = credID
 
-	if err := r.uc.UpdateCard(ctx, payloadCard, currentUser.ID); err != nil {
+	if err := r.uc.UpdateLogin(ctx, cred, currentUser.ID); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
 		return

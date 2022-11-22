@@ -2,11 +2,11 @@ package postgres
 
 import (
 	"context"
+	"github.com/vleukhin/GophKeeper/internal/helpers"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4"
 
-	"github.com/vleukhin/GophKeeper/internal/helpers"
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
@@ -28,7 +28,7 @@ func (p Storage) AddUser(ctx context.Context, name, hashedPassword string) (mode
 }
 
 const getUserByNameQuery = `
-	SELECT * FROM users WHERE name = $1
+	SELECT id, name, password FROM users WHERE name = $1
 `
 
 func (p Storage) GetUserByName(ctx context.Context, name, hashedPassword string) (models.User, error) {
@@ -40,16 +40,15 @@ func (p Storage) GetUserByName(ctx context.Context, name, hashedPassword string)
 		}
 		return user, nil
 	}
-
+	err = row.Scan(&user.ID, &user.Name, &user.Password)
+	if err != nil {
+		return user, err
+	}
 	err = helpers.VerifyPassword(hashedPassword, user.Password)
 	if err != nil {
 		return user, err
 	}
 
-	err = row.Scan(user.ID, user.Name, user.Password)
-	if err != nil {
-		return user, err
-	}
 	return user, nil
 }
 
