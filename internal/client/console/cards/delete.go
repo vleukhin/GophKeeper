@@ -10,9 +10,9 @@ import (
 
 var DelCard = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
 	Use:   "delcard",
-	Short: "Delete user card by id",
+	Short: "Delete user newCard by id",
 	Long: `
-This command remove card
+This command remove newCard
 Usage: delcard -i \"card_id\" 
 Flags:
   -i, --id string Card id

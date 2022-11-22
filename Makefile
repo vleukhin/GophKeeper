@@ -1,7 +1,12 @@
 LINTER_VERSION := "v1.48.0"
 
-build:
+build: build-client build-server
+
+build-client:
 	go build -o bin/gophkeeper-client cmd/client/main.go && chmod +x ./bin/gophkeeper-client
+
+build-server:
+	go build -o bin/gophkeeper-server cmd/server/main.go && chmod +x ./bin/gophkeeper-server
 
 up:
 	docker compose up -d

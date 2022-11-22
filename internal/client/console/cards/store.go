@@ -12,9 +12,9 @@ import (
 
 var StoreCard = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
 	Use:   "storecard",
-	Short: "Store card",
+	Short: "Store newCard",
 	Long: `
-This command store card
+This command store newCard
 Usage: storecard -p \"user_password\" 
 Flags:
   -b, --bank string       Card issuer bank
@@ -30,25 +30,25 @@ Flags:
   example: -meta'[{"name":"some_meta","value":"some_meta_value"},{"name":"some_meta2","value":"some_meta_value2"}]'
   `,
 	Run: func(cmd *cobra.Command, args []string) {
-		client.GetApp().StoreCard(userPassword, &card)
+		client.GetApp().StoreCard(userPassword, &newCard)
 	},
 }
 
 var (
-	card         models.Card //nolint:gochecknoglobals // cobra style guide
+	newCard      models.Card //nolint:gochecknoglobals // cobra style guide
 	userPassword string      //nolint:gochecknoglobals // cobra style guide
 )
 
 func init() {
 	StoreCard.Flags().StringVarP(&userPassword, "password", "p", "", "User password value.")
-	StoreCard.Flags().StringVarP(&card.Name, "title", "t", "", "Card title")
-	StoreCard.Flags().StringVarP(&card.Number, "number", "n", "", "Card number")
-	StoreCard.Flags().StringVarP(&card.CardHolderName, "owner", "o", "", "Card holder name")
-	StoreCard.Flags().StringVarP(&card.Bank, "bank", "b", "", "Card issuer bank")
-	StoreCard.Flags().StringVarP(&card.SecurityCode, "code", "c", "", "Card code")
-	StoreCard.Flags().StringVarP(&card.ExpirationMonth, "month", "m", "", "Card expiration month")
-	StoreCard.Flags().StringVarP(&card.ExpirationYear, "year", "y", "", "Card expiration year")
-	StoreCard.Flags().Var(&console.JSONFlag{Target: &card.Meta}, "meta", `Store meta fields for models`)
+	StoreCard.Flags().StringVarP(&newCard.Name, "title", "t", "", "Card title")
+	StoreCard.Flags().StringVarP(&newCard.Number, "number", "n", "", "Card number")
+	StoreCard.Flags().StringVarP(&newCard.CardHolderName, "owner", "o", "", "Card holder name")
+	StoreCard.Flags().StringVarP(&newCard.Bank, "bank", "b", "", "Card issuer bank")
+	StoreCard.Flags().StringVarP(&newCard.SecurityCode, "code", "c", "", "Card code")
+	StoreCard.Flags().StringVarP(&newCard.ExpirationMonth, "month", "m", "", "Card expiration month")
+	StoreCard.Flags().StringVarP(&newCard.ExpirationYear, "year", "y", "", "Card expiration year")
+	StoreCard.Flags().Var(&console.JSONFlag{Target: &newCard.Meta}, "meta", `Store meta fields for models`)
 
 	if err := StoreCard.MarkFlagRequired("password"); err != nil {
 		log.Fatal(err)

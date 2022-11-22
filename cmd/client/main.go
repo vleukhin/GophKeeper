@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/vleukhin/GophKeeper/internal/client/console/creds"
+	"github.com/vleukhin/GophKeeper/internal/client/console/notes"
 	"log"
 	"time"
 
@@ -32,12 +34,18 @@ func main() {
 
 	cobra.OnInitialize(initApp)
 	commands := []*cobra.Command{
-		auth.RegisterCmd,
-		auth.LoginCmd,
-		auth.LogoutCmd,
+		auth.NewRegisterCommand(),
+		auth.NewLoginCommand(),
+		auth.NewLogoutCommand(),
+		creds.StoreCred,
+		creds.GetCred,
+		creds.DelCred,
 		cards.StoreCard,
 		cards.GetCard,
 		cards.DelCard,
+		notes.StoreNote,
+		notes.GetNote,
+		notes.DelNote,
 	}
 
 	rootCmd.AddCommand(commands...)

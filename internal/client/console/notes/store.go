@@ -1,4 +1,4 @@
-package app
+package notes
 
 import (
 	"log"
@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var AddNote = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
+var StoreNote = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
 	Use:   "addnote",
 	Short: "Add note",
 	Long: `
@@ -24,26 +24,26 @@ Flags:
   example: -meta'[{"name":"some_meta","value":"some_meta_value"},{"name":"some_meta2","value":"some_meta_value2"}]'
   `,
 	Run: func(cmd *cobra.Command, args []string) {
-		client.GetApp().StoreNote(userPassword, &noteForAdditing)
+		client.GetApp().StoreNote(userPassword, &newNote)
 	},
 }
 
 var (
-	noteForAdditing models.Note //nolint:gochecknoglobals // cobra style guide
-	userPassword    string      //nolint:gochecknoglobals // cobra style guide
+	newNote      models.Note //nolint:gochecknoglobals // cobra style guide
+	userPassword string      //nolint:gochecknoglobals // cobra style guide
 )
 
 func init() {
-	AddNote.Flags().StringVarP(&userPassword, "password", "p", "", "User password value.")
+	StoreNote.Flags().StringVarP(&userPassword, "password", "p", "", "User password value.")
 
-	AddNote.Flags().StringVarP(&noteForAdditing.Name, "title", "t", "", "Login title")
-	AddNote.Flags().StringVarP(&noteForAdditing.Text, "note", "n", "", "User note")
-	AddNote.Flags().Var(&console.JSONFlag{Target: &noteForAdditing.Meta}, "meta", `Add meta fields for models`)
+	StoreNote.Flags().StringVarP(&newNote.Name, "title", "t", "", "Login title")
+	StoreNote.Flags().StringVarP(&newNote.Text, "note", "n", "", "User note")
+	StoreNote.Flags().Var(&console.JSONFlag{Target: &newNote.Meta}, "meta", `Add meta fields for models`)
 
-	if err := AddNote.MarkFlagRequired("password"); err != nil {
+	if err := StoreNote.MarkFlagRequired("password"); err != nil {
 		log.Fatal(err)
 	}
-	if err := AddNote.MarkFlagRequired("title"); err != nil {
+	if err := StoreNote.MarkFlagRequired("title"); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -1,4 +1,4 @@
-package app
+package creds
 
 import (
 	"log"
@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var GetLogin = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
+var GetCred = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
 	Use:   "getlogin",
 	Short: "Show user login by id",
 	Long: `
@@ -25,13 +25,13 @@ Flags:
 var getLoginID string //nolint:gochecknoglobals // cobra style guide
 
 func init() {
-	GetLogin.Flags().StringVarP(&userPassword, "password", "p", "", "User password value.")
-	GetLogin.Flags().StringVarP(&getLoginID, "id", "i", "", "Card id")
+	GetCred.Flags().StringVarP(&userPassword, "password", "p", "", "User password value.")
+	GetCred.Flags().StringVarP(&getLoginID, "id", "i", "", "Card id")
 
-	if err := GetLogin.MarkFlagRequired("password"); err != nil {
+	if err := GetCred.MarkFlagRequired("password"); err != nil {
 		log.Fatal(err)
 	}
-	if err := GetLogin.MarkFlagRequired("id"); err != nil {
+	if err := GetCred.MarkFlagRequired("id"); err != nil {
 		log.Fatal(err)
 	}
 }

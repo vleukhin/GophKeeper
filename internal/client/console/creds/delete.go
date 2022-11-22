@@ -1,4 +1,4 @@
-package app
+package creds
 
 import (
 	"log"
@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var DelLogin = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
+var DelCred = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
 	Use:   "dellogin",
 	Short: "Delete user login by id",
 	Long: `
@@ -25,13 +25,13 @@ Flags:
 var delLoginID string //nolint:gochecknoglobals // cobra style guide
 
 func init() {
-	DelLogin.Flags().StringVarP(&userPassword, "password", "p", "", "User password value.")
-	DelLogin.Flags().StringVarP(&delLoginID, "id", "i", "", "Card id")
+	DelCred.Flags().StringVarP(&userPassword, "password", "p", "", "User password value.")
+	DelCred.Flags().StringVarP(&delLoginID, "id", "i", "", "Card id")
 
-	if err := DelLogin.MarkFlagRequired("password"); err != nil {
+	if err := DelCred.MarkFlagRequired("password"); err != nil {
 		log.Fatal(err)
 	}
-	if err := DelLogin.MarkFlagRequired("id"); err != nil {
+	if err := DelCred.MarkFlagRequired("id"); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -1,4 +1,4 @@
-package app
+package creds
 
 import (
 	"log"
@@ -10,9 +10,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var AddCred = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
+var StoreCred = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
 	Use:   "addcred",
-	Short: "Add cred",
+	Short: "Add newCred",
 	Long: `
 This command add logit for site
 Usage: addcred -p \"user_password\" 
@@ -22,33 +22,33 @@ Flags:
   -p, --password string   User password value.
   -s, --secret string     Site password|secret
   -t, --title string      Cred title
-  -u, --uri string        Site endloint  
-  -meta 				  Add meta data for entiry
+  -u, --uri string        Site endpoint  
+  -meta 				  Add meta data for entry
   example: -meta'[{"name":"some_meta","value":"some_meta_value"},{"name":"some_meta2","value":"some_meta_value2"}]'
   `,
 	Run: func(cmd *cobra.Command, args []string) {
-		client.GetApp().StoreCred(userPassword, &cred)
+		client.GetApp().StoreCred(userPassword, &newCred)
 	},
 }
 
 var (
-	cred         models.Cred //nolint:gochecknoglobals // cobra style guide
+	newCred      models.Cred //nolint:gochecknoglobals // cobra style guide
 	userPassword string      //nolint:gochecknoglobals // cobra style guide
 )
 
 func init() {
-	AddCred.Flags().StringVarP(&userPassword, "password", "p", "", "User password value.")
+	StoreCred.Flags().StringVarP(&userPassword, "password", "p", "", "User password value.")
 
-	AddCred.Flags().StringVarP(&cred.Name, "title", "t", "", "Cred title")
-	AddCred.Flags().StringVarP(&cred.Login, "cred", "l", "", "Site cred")
-	AddCred.Flags().StringVarP(&cred.Password, "secret", "s", "", "Site password|secret")
-	AddCred.Flags().StringVarP(&cred.URI, "uri", "u", "", "Site endpoint")
-	AddCred.Flags().Var(&console.JSONFlag{Target: &cred.Meta}, "meta", `Add meta fields for models`)
+	StoreCred.Flags().StringVarP(&newCred.Name, "title", "t", "", "Cred title")
+	StoreCred.Flags().StringVarP(&newCred.Login, "newCred", "l", "", "Site newCred")
+	StoreCred.Flags().StringVarP(&newCred.Password, "secret", "s", "", "Site password|secret")
+	StoreCred.Flags().StringVarP(&newCred.URI, "uri", "u", "", "Site endpoint")
+	StoreCred.Flags().Var(&console.JSONFlag{Target: &newCred.Meta}, "meta", `Add meta fields for models`)
 
-	if err := AddCred.MarkFlagRequired("password"); err != nil {
+	if err := StoreCred.MarkFlagRequired("password"); err != nil {
 		log.Fatal(err)
 	}
-	if err := AddCred.MarkFlagRequired("title"); err != nil {
+	if err := StoreCred.MarkFlagRequired("title"); err != nil {
 		log.Fatal(err)
 	}
 }

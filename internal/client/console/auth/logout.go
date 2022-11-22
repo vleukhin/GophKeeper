@@ -6,11 +6,13 @@ import (
 	"github.com/vleukhin/GophKeeper/internal/client"
 )
 
-var LogoutCmd = &cobra.Command{ //nolint:gochecknoglobals
-	Use:   "logout",
-	Short: "Performs user logout",
-	Long:  "Performs user logout",
-	Run: func(cmd *cobra.Command, args []string) {
-		client.GetApp().Logout()
-	},
+func NewLogoutCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:   "logout",
+		Short: "Performs user logout",
+		Long:  "Performs user logout",
+		Run: func(cmd *cobra.Command, args []string) {
+			client.GetApp().Logout()
+		},
+	}
 }

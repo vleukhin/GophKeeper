@@ -10,9 +10,9 @@ import (
 
 var GetCard = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
 	Use:   "getcard",
-	Short: "Show user card by id",
+	Short: "Show user newCard by id",
 	Long: `
-This command add card
+This command add newCard
 Usage: getcard -i \"card_id\" 
 Flags:
   -i, --id string Card id
