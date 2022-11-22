@@ -97,22 +97,17 @@ linters-settings:
 linters:
   disable-all: true
   enable:
-    # formatting (paranoid)
     - gofmt
     - goimports
-    # errors
     - bodyclose
     - errcheck
     - gochecknoglobals
-    # static
     - revive
-    - deadcode
     - gocyclo
     - nakedret
     - megacheck
     - staticcheck
     - funlen
-    # - dupl
     - goconst
 
   fast: false

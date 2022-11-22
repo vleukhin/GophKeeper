@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/vleukhin/GophKeeper/internal/client/console/creds"
-	"github.com/vleukhin/GophKeeper/internal/client/console/notes"
 	"log"
 	"time"
+
+	"github.com/vleukhin/GophKeeper/internal/client/console/creds"
+	"github.com/vleukhin/GophKeeper/internal/client/console/notes"
 
 	"github.com/spf13/cobra"
 
