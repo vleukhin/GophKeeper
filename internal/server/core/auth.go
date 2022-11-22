@@ -3,9 +3,10 @@ package core
 import (
 	"context"
 	"fmt"
+	"net/mail"
+
 	"github.com/vleukhin/GophKeeper/internal/helpers"
 	"github.com/vleukhin/GophKeeper/internal/models"
-	"net/mail"
 
 	"github.com/vleukhin/GophKeeper/internal/helpers/errs"
 )

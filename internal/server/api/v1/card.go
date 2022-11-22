@@ -1,11 +1,13 @@
 package v1
 
 import (
-	"github.com/vleukhin/GophKeeper/internal/models"
 	"net/http"
+
+	"github.com/vleukhin/GophKeeper/internal/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+
 	"github.com/vleukhin/GophKeeper/internal/helpers/errs"
 )
 

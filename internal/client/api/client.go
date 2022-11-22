@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/fatih/color"
-	"github.com/go-resty/resty/v2"
-	"github.com/vleukhin/GophKeeper/internal/models"
-	"golang.org/x/exp/slices"
 	"log"
 	"net/http"
+
+	"github.com/fatih/color"
+	"github.com/go-resty/resty/v2"
+	"golang.org/x/exp/slices"
+
+	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
 type Client interface {

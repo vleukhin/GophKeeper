@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
+	"log"
+
 	config "github.com/vleukhin/GophKeeper/internal/config/server"
 	server "github.com/vleukhin/GophKeeper/internal/server/app"
-	"log"
 )
 
 func main() {

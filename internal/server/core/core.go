@@ -2,7 +2,9 @@ package core
 
 import (
 	"context"
+
 	"github.com/google/uuid"
+
 	config "github.com/vleukhin/GophKeeper/internal/config/server"
 	"github.com/vleukhin/GophKeeper/internal/models"
 	"github.com/vleukhin/GophKeeper/internal/pkg/logger"

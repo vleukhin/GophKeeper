@@ -2,11 +2,13 @@ package api
 
 import (
 	"fmt"
-	"github.com/fatih/color"
-	"github.com/go-resty/resty/v2"
-	"github.com/vleukhin/GophKeeper/internal/models"
 	"log"
 	"net/http"
+
+	"github.com/fatih/color"
+	"github.com/go-resty/resty/v2"
+
+	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
 func (c *HttpClient) Login(user *models.User) (token models.JWT, err error) {

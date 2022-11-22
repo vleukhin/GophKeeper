@@ -2,11 +2,13 @@ package core
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/fatih/color"
 	"github.com/google/uuid"
+
 	"github.com/vleukhin/GophKeeper/internal/helpers"
 	"github.com/vleukhin/GophKeeper/internal/models"
-	"log"
 )
 
 func (c *Core) loadLogins(accessToken string) {

@@ -3,7 +3,9 @@ package core
 import (
 	"context"
 	"errors"
+
 	"github.com/fatih/color"
+
 	"github.com/vleukhin/GophKeeper/internal/client/api"
 	"github.com/vleukhin/GophKeeper/internal/client/storage"
 	"github.com/vleukhin/GophKeeper/internal/config/client"

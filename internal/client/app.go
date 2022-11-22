@@ -1,8 +1,9 @@
 package client
 
 import (
-	"github.com/vleukhin/GophKeeper/internal/client/core"
 	"sync"
+
+	"github.com/vleukhin/GophKeeper/internal/client/core"
 )
 
 var (

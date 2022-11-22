@@ -2,9 +2,10 @@ package core
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/vleukhin/GophKeeper/internal/helpers"
 	"github.com/vleukhin/GophKeeper/internal/models"
-	"log"
 
 	"github.com/fatih/color"
 	"github.com/google/uuid"

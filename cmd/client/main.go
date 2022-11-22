@@ -3,7 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/spf13/cobra"
+
 	"github.com/vleukhin/GophKeeper/internal/client"
 	"github.com/vleukhin/GophKeeper/internal/client/api"
 	"github.com/vleukhin/GophKeeper/internal/client/console/auth"
@@ -11,8 +15,6 @@ import (
 	"github.com/vleukhin/GophKeeper/internal/client/storage"
 	"github.com/vleukhin/GophKeeper/internal/client/storage/postgres"
 	config "github.com/vleukhin/GophKeeper/internal/config/client"
-	"log"
-	"time"
 )
 
 var buildVersion = "N/A"

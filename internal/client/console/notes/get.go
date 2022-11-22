@@ -1,8 +1,9 @@
 package app
 
 import (
-	"github.com/vleukhin/GophKeeper/internal/client"
 	"log"
+
+	"github.com/vleukhin/GophKeeper/internal/client"
 
 	"github.com/spf13/cobra"
 )

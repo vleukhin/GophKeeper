@@ -2,8 +2,9 @@ package postgres
 
 import (
 	"context"
-	"github.com/jackc/pgx/v4/pgxpool"
 	"time"
+
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type Storage struct {
