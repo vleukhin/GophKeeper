@@ -1,6 +1,7 @@
 package core
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -19,7 +20,7 @@ func (c *Core) loadLogins(accessToken string) {
 		return
 	}
 
-	if err = c.storage.SaveCreds(nil, logins); err != nil {
+	if err = c.storage.SaveCreds(context.TODO(), logins); err != nil {
 		log.Println(err)
 
 		return
@@ -38,7 +39,7 @@ func (c *Core) StoreCred(userPassword string, login *models.Cred) {
 		return
 	}
 
-	if err = c.storage.AddCred(nil, *login); err != nil {
+	if err = c.storage.AddCred(context.TODO(), *login); err != nil {
 		log.Fatal(err)
 	}
 
@@ -55,7 +56,7 @@ func (c *Core) ShowCred(userPassword, loginID string) {
 
 		return
 	}
-	cred, err := c.storage.GetCredByID(nil, loginUUID)
+	cred, err := c.storage.GetCredByID(context.TODO(), loginUUID)
 	if err != nil {
 		color.Red(err.Error())
 
@@ -95,7 +96,7 @@ func (c *Core) DelCred(userPassword, loginID string) {
 		log.Fatalf("Core - uuid.Parse - %v", err)
 	}
 
-	if err := c.storage.DelCred(nil, loginUUID); err != nil {
+	if err := c.storage.DelCred(context.TODO(), loginUUID); err != nil {
 		log.Fatalf("Core - storage.DelCred - %v", err)
 	}
 

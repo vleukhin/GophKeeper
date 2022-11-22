@@ -44,7 +44,7 @@ func (c *Core) Register(user *models.User) {
 	}
 
 	user.Password = hashedPassword
-	if err = c.storage.AddUser(nil, "", ""); err != nil {
+	if err = c.storage.AddUser(context.TODO(), "", ""); err != nil {
 		color.Red("Internal error: %v", err)
 
 		return
@@ -56,7 +56,7 @@ func (c *Core) Register(user *models.User) {
 }
 
 func (c *Core) Logout() {
-	if err := c.storage.DropUserToken(nil, nil); err != nil {
+	if err := c.storage.DropUserToken(context.TODO(), nil); err != nil {
 		color.Red("Internal error: %v", err)
 
 		return
@@ -66,7 +66,7 @@ func (c *Core) Logout() {
 }
 
 func (c *Core) verifyPassword(userPassword string) bool {
-	hash, err := c.storage.GetUserPasswordHash(nil, nil)
+	hash, err := c.storage.GetUserPasswordHash(context.TODO(), nil)
 	if err != nil {
 		log.Println(err.Error())
 		return false

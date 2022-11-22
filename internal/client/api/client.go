@@ -44,12 +44,12 @@ type NoteClient interface {
 	DelNote(accessToken, noteID string) error
 }
 
-type HttpClient struct {
+type HTTPClient struct {
 	host string
 }
 
-func NewHttpClient(host string) Client {
-	return &HttpClient{host: host}
+func NewHTTPClient(host string) Client {
+	return &HTTPClient{host: host}
 }
 
 var errServer = errors.New("got server error")
@@ -66,7 +66,7 @@ func parseServerError(body []byte) string {
 	return ""
 }
 
-func (c *HttpClient) getEntities(models interface{}, accessToken, endpoint string) error {
+func (c *HTTPClient) getEntities(models interface{}, accessToken, endpoint string) error {
 	client := resty.New()
 	client.SetAuthToken(accessToken)
 	resp, err := client.R().
@@ -85,7 +85,7 @@ func (c *HttpClient) getEntities(models interface{}, accessToken, endpoint strin
 	return nil
 }
 
-func (c *HttpClient) delEntity(accessToken, endpoint, id string) error {
+func (c *HTTPClient) delEntity(accessToken, endpoint, id string) error {
 	client := resty.New()
 	client.SetAuthToken(accessToken)
 	resp, err := client.R().
@@ -101,7 +101,7 @@ func (c *HttpClient) delEntity(accessToken, endpoint, id string) error {
 	return nil
 }
 
-func (c *HttpClient) addEntity(models interface{}, accessToken, endpoint string) error {
+func (c *HTTPClient) addEntity(models interface{}, accessToken, endpoint string) error {
 	client := resty.New()
 	client.SetAuthToken(accessToken)
 	resp, err := client.R().
@@ -119,7 +119,7 @@ func (c *HttpClient) addEntity(models interface{}, accessToken, endpoint string)
 	return nil
 }
 
-func (c *HttpClient) checkResCode(resp *resty.Response) error {
+func (c *HTTPClient) checkResCode(resp *resty.Response) error {
 	badCodes := []int{http.StatusBadRequest, http.StatusInternalServerError, http.StatusUnauthorized}
 	if slices.Contains(badCodes, resp.StatusCode()) {
 		errMessage := parseServerError(resp.Body())

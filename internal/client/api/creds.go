@@ -6,7 +6,7 @@ import (
 
 const credsEndpoint = "api/creds"
 
-func (c *HttpClient) GetCreds(accessToken string) (logins []models.Cred, err error) {
+func (c *HTTPClient) GetCreds(accessToken string) (logins []models.Cred, err error) {
 	if err := c.getEntities(&logins, accessToken, credsEndpoint); err != nil {
 		return nil, err
 	}
@@ -14,10 +14,10 @@ func (c *HttpClient) GetCreds(accessToken string) (logins []models.Cred, err err
 	return logins, nil
 }
 
-func (c *HttpClient) AddCred(accessToken string, login *models.Cred) error {
+func (c *HTTPClient) AddCred(accessToken string, login *models.Cred) error {
 	return c.addEntity(login, accessToken, credsEndpoint)
 }
 
-func (c *HttpClient) DelCred(accessToken, loginID string) error {
+func (c *HTTPClient) DelCred(accessToken, loginID string) error {
 	return c.delEntity(accessToken, credsEndpoint, loginID)
 }

@@ -19,7 +19,7 @@ func (m MockStorage) LoadNotes(context.Context) ([]models.Note, error) {
 	return nil, nil
 }
 
-func (m MockStorage) SaveNotes(notes []models.Note) error {
+func (m MockStorage) SaveNotes(ctx context.Context, notes []models.Note) error {
 	return nil
 }
 

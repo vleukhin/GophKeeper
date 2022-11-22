@@ -35,9 +35,9 @@ func (p Storage) LoadNotes(ctx context.Context) ([]models.Note, error) {
 	return result, nil
 }
 
-func (p Storage) SaveNotes(notes []models.Note) error {
+func (p Storage) SaveNotes(ctx context.Context, notes []models.Note) error {
 	for _, n := range notes {
-		err := p.AddNote(nil, n)
+		err := p.AddNote(ctx, n)
 		if err != nil {
 			return err
 		}

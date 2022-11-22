@@ -44,7 +44,7 @@ type CredRepo interface {
 
 type NotesRepo interface {
 	LoadNotes(context.Context) ([]models.Note, error)
-	SaveNotes([]models.Note) error
+	SaveNotes(context.Context, []models.Note) error
 	AddNote(context.Context, models.Note) error
 	GetNoteByID(ctx context.Context, notedID uuid.UUID) (models.Note, error)
 	DelNote(ctx context.Context, noteID uuid.UUID) error

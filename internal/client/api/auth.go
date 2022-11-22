@@ -11,7 +11,7 @@ import (
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
-func (c *HttpClient) Login(user *models.User) (token models.JWT, err error) {
+func (c *HTTPClient) Login(user *models.User) (token models.JWT, err error) {
 	client := resty.New()
 	body := fmt.Sprintf(`{"name":%q, "password":%q}`, user.Name, user.Password)
 	resp, err := client.R().
@@ -32,7 +32,7 @@ func (c *HttpClient) Login(user *models.User) (token models.JWT, err error) {
 	return token, nil
 }
 
-func (c *HttpClient) Register(user *models.User) error {
+func (c *HTTPClient) Register(user *models.User) error {
 	client := resty.New()
 	body := fmt.Sprintf(`{"name":%q, "password":%q}`, user.Name, user.Password)
 	resp, err := client.R().

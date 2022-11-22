@@ -17,25 +17,19 @@ import (
 	config "github.com/vleukhin/GophKeeper/internal/config/client"
 )
 
-var buildVersion = "N/A"
-var buildDate = "N/A"
-var buildCommit = "N/A"
-
-var rootCmd = &cobra.Command{
-	Short: "GophKeeper Client",
-	Long:  `GothKeeper client stores your private data`,
-	Run: func(cmd *cobra.Command, args []string) {
-		printBuildInfo()
-	},
-}
+var buildVersion = "N/A" //nolint:gochecknoglobals
+var buildDate = "N/A"    //nolint:gochecknoglobals
+var buildCommit = "N/A"  //nolint:gochecknoglobals
 
 func main() {
-	if err := rootCmd.Execute(); err != nil {
-		log.Fatal(err)
+	var rootCmd = &cobra.Command{
+		Short: "GophKeeper Client",
+		Long:  `GothKeeper client stores your private data`,
+		Run: func(cmd *cobra.Command, args []string) {
+			printBuildInfo()
+		},
 	}
-}
 
-func init() {
 	cobra.OnInitialize(initApp)
 	commands := []*cobra.Command{
 		auth.RegisterCmd,
@@ -47,6 +41,10 @@ func init() {
 	}
 
 	rootCmd.AddCommand(commands...)
+
+	if err := rootCmd.Execute(); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func initApp() {
@@ -69,7 +67,7 @@ func initApp() {
 	app := client.GetApp()
 	app.SetStorage(repo)
 	app.SetConfig(cfg)
-	app.SetAPIClient(api.NewHttpClient(cfg.Server.URL))
+	app.SetAPIClient(api.NewHTTPClient(cfg.Server.URL))
 	err = app.InitDB(context.TODO())
 	if err != nil {
 		log.Fatal(err.Error())

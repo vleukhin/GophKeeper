@@ -1,6 +1,7 @@
 package core
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -19,7 +20,7 @@ func (c *Core) loadNotes(accessToken string) {
 		return
 	}
 
-	if err = c.storage.SaveNotes(notes); err != nil {
+	if err = c.storage.SaveNotes(context.TODO(), notes); err != nil {
 		log.Println(err)
 
 		return
@@ -38,7 +39,7 @@ func (c *Core) StoreNote(userPassword string, note *models.Note) {
 		log.Fatalf("Core - AddNote - %v", err)
 	}
 
-	if err = c.storage.AddNote(nil, *note); err != nil {
+	if err = c.storage.AddNote(context.TODO(), *note); err != nil {
 		log.Fatal(err)
 	}
 
@@ -55,7 +56,7 @@ func (c *Core) ShowNote(userPassword, noteID string) {
 
 		return
 	}
-	note, err := c.storage.GetNoteByID(nil, noteUUID)
+	note, err := c.storage.GetNoteByID(context.TODO(), noteUUID)
 	if err != nil {
 		color.Red(err.Error())
 
@@ -91,7 +92,7 @@ func (c *Core) DelNote(userPassword, noteID string) {
 		log.Fatalf("Core - uuid.Parse - %v", err)
 	}
 
-	if err := c.storage.DelNote(nil, noteUUID); err != nil {
+	if err := c.storage.DelNote(context.TODO(), noteUUID); err != nil {
 		log.Fatalf("Core - storage.DelNote - %v", err)
 	}
 
