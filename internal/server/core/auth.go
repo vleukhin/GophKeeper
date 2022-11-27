@@ -2,8 +2,6 @@ package core
 
 import (
 	"context"
-	"fmt"
-
 	"github.com/vleukhin/GophKeeper/internal/helpers"
 	"github.com/vleukhin/GophKeeper/internal/models"
 
@@ -44,8 +42,8 @@ func (c *Core) SignInUser(ctx context.Context, email, password string) (token mo
 		return
 	}
 
-	token.AccessTokenMaxAge = c.cfg.Security.AccessTokenMaxAge * minutesPerHour
-	token.RefreshTokenMaxAge = c.cfg.Security.RefreshTokenMaxAge * minutesPerHour
+	token.AccessTokenMaxAge = c.cfg.Security.AccessTokenMaxAge
+	token.RefreshTokenMaxAge = c.cfg.Security.RefreshTokenMaxAge
 	token.Domain = c.cfg.Security.Domain
 
 	return token, nil
@@ -59,7 +57,7 @@ func (c *Core) RefreshAccessToken(ctx context.Context, refreshToken string) (tok
 		return
 	}
 
-	user, err := c.repo.GetUserByID(ctx, fmt.Sprint(userID))
+	user, err := c.repo.GetUserByID(ctx, userID)
 	if err != nil {
 		err = errs.ErrTokenValidation
 
@@ -86,14 +84,13 @@ func (c *Core) RefreshAccessToken(ctx context.Context, refreshToken string) (tok
 func (c *Core) CheckAccessToken(ctx context.Context, accessToken string) (models.User, error) {
 	var user models.User
 
-	sub, err := helpers.ValidateToken(accessToken, c.cfg.AccessTokenPublicKey)
+	userID, err := helpers.ValidateToken(accessToken, c.cfg.AccessTokenPublicKey)
 	if err != nil {
 		err = errs.ErrTokenValidation
 
 		return user, err
 	}
 
-	userID := fmt.Sprint(sub)
 	user, err = c.repo.GetUserByID(ctx, userID)
 
 	if err != nil {

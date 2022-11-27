@@ -1,6 +1,9 @@
 package models
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+	"time"
+)
 
 type User struct {
 	ID       uuid.UUID `json:"uuid"`
@@ -9,11 +12,11 @@ type User struct {
 }
 
 type JWT struct {
-	AccessToken        string `json:"access_token"`
-	RefreshToken       string `json:"refresh_token"`
-	AccessTokenMaxAge  int    `json:"-"`
-	RefreshTokenMaxAge int    `json:"-"`
-	Domain             string `json:"-"`
+	AccessToken        string        `json:"access_token"`
+	RefreshToken       string        `json:"refresh_token"`
+	AccessTokenMaxAge  time.Duration `json:"-"`
+	RefreshTokenMaxAge time.Duration `json:"-"`
+	Domain             string        `json:"-"`
 }
 
 type Card struct {

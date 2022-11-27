@@ -41,18 +41,12 @@ func (r *Router) LogIn(ctx *gin.Context) {
 	jwt, err := r.uc.SignInUser(ctx, payload.Name, payload.Password)
 
 	if err == nil {
-		ctx.SetCookie("access_token", jwt.AccessToken, jwt.AccessTokenMaxAge, "/", jwt.Domain, false, true)
-		ctx.SetCookie("refresh_token", jwt.RefreshToken, jwt.RefreshTokenMaxAge, "/", jwt.Domain, false, true)
-		ctx.SetCookie("logged_in", "true", jwt.AccessTokenMaxAge, "/", jwt.Domain, false, false)
-
 		ctx.JSON(http.StatusOK, jwt)
-
 		return
 	}
 
 	if errors.Is(err, errs.ErrWrongCredentials) {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
-
 		return
 	}
 
@@ -70,11 +64,7 @@ func (r *Router) RefreshAccessToken(ctx *gin.Context) {
 	jwt, err := r.uc.RefreshAccessToken(ctx, refreshToken)
 
 	if err == nil {
-		ctx.SetCookie("access_token", jwt.AccessToken, jwt.AccessTokenMaxAge, "/", jwt.Domain, false, true)
-		ctx.SetCookie("logged_in", "true", jwt.AccessTokenMaxAge, "/", jwt.Domain, false, false)
-
 		ctx.JSON(http.StatusOK, jwt)
-
 		return
 	}
 

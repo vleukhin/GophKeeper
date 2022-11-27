@@ -40,8 +40,8 @@ type (
 		RefreshTokenPublicKey  string        `yaml:"refresh_token_public_key" env:"REFRESH_TOKEN_PUBLIC_KEY"`
 		AccessTokenExpiresIn   time.Duration `yaml:"access_token_expired_in" env:"ACCESS_TOKEN_EXPIRED_IN"`
 		RefreshTokenExpiresIn  time.Duration `yaml:"refresh_token_expired_in" env:"REFRESH_TOKEN_EXPIRED_IN"`
-		AccessTokenMaxAge      int           `yaml:"access_token_maxage" env:"ACCESS_TOKEN_MAXAGE"`
-		RefreshTokenMaxAge     int           `yaml:"refresh_token_maxage" env:"REFRESH_TOKEN_MAXAGE"`
+		AccessTokenMaxAge      time.Duration `yaml:"access_token_maxage" env:"ACCESS_TOKEN_MAXAGE"`
+		RefreshTokenMaxAge     time.Duration `yaml:"refresh_token_maxage" env:"REFRESH_TOKEN_MAXAGE"`
 		Domain                 string        `yaml:"domain" env:"DOMAIN"`
 	}
 )

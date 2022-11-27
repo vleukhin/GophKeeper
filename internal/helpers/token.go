@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"github.com/google/uuid"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -11,7 +12,7 @@ import (
 
 var errToken = errors.New("tokenError")
 
-func CreateToken(ttl time.Duration, payload interface{}, privateKey string) (string, error) {
+func CreateToken(ttl time.Duration, userID uuid.UUID, privateKey string) (string, error) {
 	decodedPrivateKey, err := base64.StdEncoding.DecodeString(privateKey)
 	if err != nil {
 		return "", fmt.Errorf("could not decode key: %w", err)
@@ -25,7 +26,7 @@ func CreateToken(ttl time.Duration, payload interface{}, privateKey string) (str
 	now := time.Now().UTC()
 
 	claims := make(jwt.MapClaims)
-	claims["sub"] = payload
+	claims["sub"] = userID.String()
 	claims["exp"] = now.Add(ttl).Unix()
 	claims["iat"] = now.Unix()
 	claims["nbf"] = now.Unix()
@@ -38,10 +39,10 @@ func CreateToken(ttl time.Duration, payload interface{}, privateKey string) (str
 	return token, nil
 }
 
-func ValidateToken(token, publicKey string) (interface{}, error) {
+func ValidateToken(token, publicKey string) (string, error) {
 	decodedPublicKey, err := base64.StdEncoding.DecodeString(publicKey)
 	if err != nil {
-		return nil, fmt.Errorf("could not decode: %w", err)
+		return "", fmt.Errorf("could not decode: %w", err)
 	}
 
 	key, err := jwt.ParseRSAPublicKeyFromPEM(decodedPublicKey)
@@ -57,13 +58,18 @@ func ValidateToken(token, publicKey string) (interface{}, error) {
 		return key, nil
 	})
 	if err != nil {
-		return nil, fmt.Errorf("validate: %w", err)
+		return "", fmt.Errorf("validate: %w", err)
 	}
 
 	claims, ok := parsedToken.Claims.(jwt.MapClaims)
 	if !ok || !parsedToken.Valid {
-		return nil, fmt.Errorf("%w: %s", errToken, "validate: invalid token")
+		return "", fmt.Errorf("%w: %s", errToken, "validate: invalid token")
 	}
 
-	return claims["sub"], nil
+	userID, ok := claims["sub"].(string)
+	if !ok {
+		return "", fmt.Errorf("%w: %s", errToken, "validate: invalid subject")
+	}
+
+	return userID, nil
 }
