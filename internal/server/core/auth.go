@@ -97,9 +97,7 @@ func (c *Core) CheckAccessToken(ctx context.Context, accessToken string) (models
 	user, err = c.repo.GetUserByID(ctx, userID)
 
 	if err != nil {
-		err = errs.ErrTokenValidation
-
-		return user, err
+		return user, errs.ErrTokenValidation
 	}
 
 	return user, nil

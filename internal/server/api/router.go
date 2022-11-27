@@ -13,28 +13,27 @@ type Router struct {
 }
 
 func NewRouter(e *gin.Engine, g core.GophKeeperServer, l logger.Interface) {
-	h := e.Group("/api")
-
 	r := &Router{g, l}
+	h := e.Group("/api", r.AuthMiddleware())
 
-	h.GET("/health", r.HealthCheck)
+	e.GET("/health", r.HealthCheck)
 
-	h.GET("me", r.ProtectedByAccessToken(), r.UserInfo)
+	h.GET("me", r.UserInfo)
 
-	h.GET("creds", r.ProtectedByAccessToken(), r.GetCreds)
-	h.POST("creds", r.ProtectedByAccessToken(), r.AddCred)
-	h.DELETE("creds/:id", r.ProtectedByAccessToken(), r.DelCred)
-	h.PATCH("creds/:id", r.ProtectedByAccessToken(), r.UpdateCred)
+	h.GET("creds", r.GetCreds)
+	h.POST("creds", r.AddCred)
+	h.DELETE("creds/:id", r.DelCred)
+	h.PATCH("creds/:id", r.UpdateCred)
 
-	h.GET("cards", r.ProtectedByAccessToken(), r.GetCards)
-	h.POST("cards", r.ProtectedByAccessToken(), r.AddCard)
-	h.DELETE("cards/:id", r.ProtectedByAccessToken(), r.DelCard)
-	h.PATCH("cards/:id", r.ProtectedByAccessToken(), r.UpdateCard)
+	h.GET("cards", r.GetCards)
+	h.POST("cards", r.AddCard)
+	h.DELETE("cards/:id", r.DelCard)
+	h.PATCH("cards/:id", r.UpdateCard)
 
-	h.GET("notes", r.ProtectedByAccessToken(), r.GetNotes)
-	h.POST("notes", r.ProtectedByAccessToken(), r.AddNote)
-	h.DELETE("notes/:id", r.ProtectedByAccessToken(), r.DelNote)
-	h.PATCH("notes/:id", r.ProtectedByAccessToken(), r.UpdateNote)
+	h.GET("notes", r.GetNotes)
+	h.POST("notes", r.AddNote)
+	h.DELETE("notes/:id", r.DelNote)
+	h.PATCH("notes/:id", r.UpdateNote)
 
 	authAPI := h.Group("/auth")
 	{

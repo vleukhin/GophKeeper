@@ -42,14 +42,9 @@ func (p Storage) GetCardByID(ctx context.Context, cardID uuid.UUID) (models.Card
 	row := p.conn.QueryRow(ctx, getCardByIDQuery, cardID)
 	err := row.Scan(&result.ID, &result.Name, &result.CardHolderName, &result.Number, &result.Bank,
 		&result.ExpirationMonth, &result.ExpirationYear, &result.SecurityCode, &result.Meta)
-	if err != nil {
-		if err == pgx.ErrNoRows {
-			return result, nil
-		}
-
+	if err != nil && err != pgx.ErrNoRows {
 		return result, err
 	}
-
 	return result, nil
 }
 

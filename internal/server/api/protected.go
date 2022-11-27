@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (r *Router) ProtectedByAccessToken() gin.HandlerFunc {
+func (r *Router) AuthMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var accessToken string
 
