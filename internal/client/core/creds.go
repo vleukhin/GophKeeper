@@ -36,11 +36,13 @@ func (c *Core) StoreCred(userPassword string, login *models.Cred) {
 	c.encryptLogin(userPassword, login)
 
 	if err = c.client.AddCred(accessToken, login); err != nil {
+		color.Red(err.Error())
 		return
 	}
 
 	if err = c.storage.AddCred(context.TODO(), *login); err != nil {
-		log.Fatal(err)
+		color.Red(err.Error())
+		return
 	}
 
 	color.Green("Login %q added, id: %v", login.Name, login.ID)
@@ -53,13 +55,11 @@ func (c *Core) ShowCred(userPassword, loginID string) {
 	loginUUID, err := uuid.Parse(loginID)
 	if err != nil {
 		color.Red(err.Error())
-
 		return
 	}
 	cred, err := c.storage.GetCredByID(context.TODO(), loginUUID)
 	if err != nil {
 		color.Red(err.Error())
-
 		return
 	}
 
@@ -92,7 +92,6 @@ func (c *Core) DelCred(userPassword, loginID string) {
 	}
 	loginUUID, err := uuid.Parse(loginID)
 	if err != nil {
-		color.Red(err.Error())
 		log.Fatalf("Core - uuid.Parse - %v", err)
 	}
 

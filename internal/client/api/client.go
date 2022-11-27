@@ -7,8 +7,6 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/pkg/errors"
-	"golang.org/x/exp/slices"
-
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
@@ -54,8 +52,6 @@ func NewHTTPClient(host string) Client {
 	}
 }
 
-var errServer = errors.New("got server error")
-
 func (c *HTTPClient) post(url string, body, result interface{}) (*resty.Response, error) {
 	return c.client.R().
 		SetHeader("Content-Type", "application/json").
@@ -71,15 +67,13 @@ func (c *HTTPClient) get(url string, result interface{}) (*resty.Response, error
 }
 
 func parseServerError(body []byte) string {
-	var errMessage struct {
-		Message string `json:"error"`
+	var errResponse models.ErrMessage
+
+	if err := json.Unmarshal(body, &errResponse); err == nil {
+		return errResponse.Message
 	}
 
-	if err := json.Unmarshal(body, &errMessage); err == nil {
-		return errMessage.Message
-	}
-
-	return ""
+	return "Unknown error"
 }
 
 func (c *HTTPClient) getEntities(models interface{}, accessToken, endpoint string) error {
@@ -104,7 +98,7 @@ func (c *HTTPClient) delEntity(accessToken, endpoint, id string) error {
 		return err
 	}
 	if err := c.checkResCode(resp); err != nil {
-		return errServer
+		return err
 	}
 
 	return nil
@@ -122,15 +116,14 @@ func (c *HTTPClient) addEntity(models interface{}, accessToken, endpoint string)
 		return err
 	}
 	if err := c.checkResCode(resp); err != nil {
-		return errServer
+		return err
 	}
 
 	return nil
 }
 
 func (c *HTTPClient) checkResCode(resp *resty.Response) error {
-	badCodes := []int{http.StatusBadRequest, http.StatusInternalServerError, http.StatusUnauthorized}
-	if slices.Contains(badCodes, resp.StatusCode()) {
+	if resp.StatusCode() != http.StatusOK {
 		errMessage := parseServerError(resp.Body())
 		return errors.New(fmt.Sprintf("Server error: %s", errMessage))
 	}

@@ -2,9 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
-	"net/http"
-
 	"github.com/pkg/errors"
 
 	"github.com/vleukhin/GophKeeper/internal/models"
@@ -24,9 +21,8 @@ func (c *HTTPClient) Login(user models.User) (models.JWT, error) {
 	if err != nil {
 		return token, errors.Wrap(err, "request error")
 	}
-
-	if resp.StatusCode() != http.StatusOK {
-		return token, errors.Wrap(err, fmt.Sprintf("bas response code from server: %d", resp.StatusCode()))
+	if err := c.checkResCode(resp); err != nil {
+		return token, err
 	}
 
 	return token, nil
@@ -45,9 +41,8 @@ func (c *HTTPClient) Register(user models.User) error {
 	if err != nil {
 		return errors.Wrap(err, "request error")
 	}
-
-	if resp.StatusCode() != http.StatusOK {
-		return errors.Wrap(err, fmt.Sprintf("bas response code from server: %d", resp.StatusCode()))
+	if err := c.checkResCode(resp); err != nil {
+		return err
 	}
 
 	return nil
