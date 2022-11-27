@@ -17,7 +17,7 @@ func (r *Router) GetCreds(ctx *gin.Context) {
 		errorResponse(ctx, http.StatusInternalServerError, errs.ErrUnexpectedError.Error())
 	}
 
-	userLogins, err := r.uc.GetLogins(ctx, currentUser)
+	userLogins, err := r.uc.GetCred(ctx, currentUser)
 	if err != nil {
 		errorResponse(ctx, http.StatusInternalServerError, err.Error())
 	}
@@ -45,7 +45,7 @@ func (r *Router) AddCred(ctx *gin.Context) {
 		return
 	}
 
-	if err := r.uc.AddLogin(ctx, payloadLogin, currentUser.ID); err != nil {
+	if err := r.uc.AddCred(ctx, payloadLogin, currentUser.ID); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
 		return
@@ -67,7 +67,7 @@ func (r *Router) DelCred(ctx *gin.Context) {
 		errorResponse(ctx, http.StatusInternalServerError, errs.ErrUnexpectedError.Error())
 	}
 
-	if err := r.uc.DelLogin(ctx, loginUUID, currentUser.ID); err != nil {
+	if err := r.uc.DelCred(ctx, loginUUID, currentUser.ID); err != nil {
 		errorResponse(ctx, http.StatusInternalServerError, err.Error())
 
 		return
@@ -101,7 +101,7 @@ func (r *Router) UpdateCred(ctx *gin.Context) {
 
 	cred.ID = credID
 
-	if err := r.uc.UpdateLogin(ctx, cred, currentUser.ID); err != nil {
+	if err := r.uc.UpdateCred(ctx, cred, currentUser.ID); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
 		return

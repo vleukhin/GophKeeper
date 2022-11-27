@@ -19,10 +19,10 @@ type GophKeeperServer interface {
 	GetDomainName() string
 	CheckAccessToken(ctx context.Context, accessToken string) (models.User, error)
 
-	GetLogins(ctx context.Context, user models.User) ([]models.Cred, error)
-	AddLogin(ctx context.Context, login *models.Cred, userID uuid.UUID) error
-	DelLogin(ctx context.Context, loginID, userID uuid.UUID) error
-	UpdateLogin(ctx context.Context, login *models.Cred, userID uuid.UUID) error
+	GetCred(ctx context.Context, user models.User) ([]models.Cred, error)
+	AddCred(ctx context.Context, login *models.Cred, userID uuid.UUID) error
+	DelCred(ctx context.Context, loginID, userID uuid.UUID) error
+	UpdateCred(ctx context.Context, login *models.Cred, userID uuid.UUID) error
 
 	GetCards(ctx context.Context, user models.User) ([]models.Card, error)
 	AddCard(ctx context.Context, card *models.Card, userID uuid.UUID) error
