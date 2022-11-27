@@ -55,7 +55,7 @@ func (c *Core) loadCards(accessToken string) {
 		return
 	}
 
-	if err = c.storage.StoreCards(context.TODO(), cards); err != nil {
+	if err = c.storage.StoreCards(context.Background(), cards); err != nil {
 		log.Println(err)
 
 		return
@@ -73,7 +73,7 @@ func (c *Core) ShowCard(userPassword, cardID string) {
 
 		return
 	}
-	card, err := c.storage.GetCardByID(context.TODO(), cardUUID)
+	card, err := c.storage.GetCardByID(context.Background(), cardUUID)
 	if err != nil {
 		color.Red(err.Error())
 
@@ -105,7 +105,7 @@ func (c *Core) DelCard(userPassword, cardID string) {
 		log.Fatalf("Core - uuid.Parse - %v", err)
 	}
 
-	if err := c.storage.DelCard(context.TODO(), cardUUID); err != nil {
+	if err := c.storage.DelCard(context.Background(), cardUUID); err != nil {
 		log.Fatalf("Core - storage.DelCard - %v", err)
 	}
 

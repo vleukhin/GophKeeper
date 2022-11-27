@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"log"
 
 	"github.com/fatih/color"
 
@@ -10,43 +9,48 @@ import (
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
-func (c *Core) Login(user *models.User) {
-	ctx := context.TODO()
+func (c *Core) Login(user models.User) {
+	ctx := context.Background()
 	token, err := c.client.Login(user)
 	if err != nil {
+		color.Red("Failed to log in user: %v", err)
 		return
 	}
 
 	exists, err := c.storage.UserExists(ctx, user.Name)
 	if err != nil {
-		log.Fatal(err.Error())
+		color.Red("Storage error: %v", err)
+		return
 	}
 
 	if !exists {
 		err = c.storage.AddUser(ctx, user.Name, user.Password)
 		if err != nil {
-			log.Fatal(err)
+			color.Red("Storage error: %v", err)
+			return
 		}
 	}
-	if err = c.storage.UpdateUserToken(ctx, user, &token); err != nil {
-		log.Fatal(err)
+	if err = c.storage.UpdateUserToken(ctx, user, token); err != nil {
+		color.Red("Storage error: %v", err)
+		return
 	}
 	color.Green("Got authorization token for %q", user.Name)
 }
 
-func (c *Core) Register(user *models.User) {
+func (c *Core) Register(user models.User) {
 	if err := c.client.Register(user); err != nil {
+		color.Red("Failed to register user: %v", err)
 		return
 	}
 	hashedPassword, err := helpers.HashPassword(user.Password)
 	if err != nil {
-		log.Fatal(err)
+		color.Red("Failed to hash password: %v", err)
+		return
 	}
 
 	user.Password = hashedPassword
-	if err = c.storage.AddUser(context.TODO(), user.Name, hashedPassword); err != nil {
+	if err = c.storage.AddUser(context.Background(), user.Name, hashedPassword); err != nil {
 		color.Red("Internal error: %v", err)
-
 		return
 	}
 
@@ -56,9 +60,8 @@ func (c *Core) Register(user *models.User) {
 }
 
 func (c *Core) Logout() {
-	if err := c.storage.DropUserToken(context.TODO(), nil); err != nil {
-		color.Red("Internal error: %v", err)
-
+	if err := c.storage.DropUserToken(context.Background(), nil); err != nil {
+		color.Red("Storage error: %v", err)
 		return
 	}
 
@@ -66,14 +69,13 @@ func (c *Core) Logout() {
 }
 
 func (c *Core) verifyPassword(userPassword string) bool {
-	hash, err := c.storage.GetUserPasswordHash(context.TODO(), nil)
+	hash, err := c.storage.GetUserPasswordHash(context.Background(), nil)
 	if err != nil {
-		log.Println(err.Error())
+		color.Red("Storage error: %v", err)
 		return false
 	}
 	if err := helpers.VerifyPassword(hash, userPassword); err != nil {
 		color.Red("Password check status: failed")
-
 		return false
 	}
 

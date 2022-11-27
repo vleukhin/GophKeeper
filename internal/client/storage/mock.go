@@ -63,7 +63,7 @@ func (m MockStorage) AddUser(ctx context.Context, name string, password string) 
 	return nil
 }
 
-func (m MockStorage) UpdateUserToken(ctx context.Context, user *models.User, token *models.JWT) error {
+func (m MockStorage) UpdateUserToken(ctx context.Context, user models.User, token models.JWT) error {
 	return nil
 }
 

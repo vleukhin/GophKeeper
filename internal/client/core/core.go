@@ -27,8 +27,8 @@ type (
 	}
 
 	AuthService interface {
-		Register(user *models.User)
-		Login(user *models.User)
+		Register(user models.User)
+		Login(user models.User)
 		Logout()
 	}
 	CardsService interface {

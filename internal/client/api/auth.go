@@ -1,54 +1,53 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
-	"github.com/fatih/color"
-	"github.com/go-resty/resty/v2"
+	"github.com/pkg/errors"
 
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
-func (c *HTTPClient) Login(user *models.User) (token models.JWT, err error) {
-	client := resty.New()
-	body := fmt.Sprintf(`{"name":%q, "password":%q}`, user.Name, user.Password)
-	resp, err := client.R().
-		SetHeader("Content-Type", "application/json").
-		SetBody(body).
-		SetResult(&token).
-		Post(fmt.Sprintf("%s/api/auth/login", c.host))
+func (c *HTTPClient) Login(user models.User) (models.JWT, error) {
+	var token models.JWT
+	payload := models.LoginPayload{
+		Name:     user.Name,
+		Password: user.Password,
+	}
+	body, err := json.Marshal(payload)
 	if err != nil {
-		return
+		return token, errors.Wrap(err, "failed to marshal user payload")
+	}
+	resp, err := c.post("api/auth/login", body, &token)
+	if err != nil {
+		return token, errors.Wrap(err, "request error")
 	}
 
-	if resp.StatusCode() == http.StatusBadRequest || resp.StatusCode() == http.StatusInternalServerError {
-		color.Red("Server error: %s", parseServerError(resp.Body()))
-
-		return token, errServer
+	if resp.StatusCode() != http.StatusOK {
+		return token, errors.Wrap(err, fmt.Sprintf("bas response code from server: %d", resp.StatusCode()))
 	}
 
 	return token, nil
 }
 
-func (c *HTTPClient) Register(user *models.User) error {
-	client := resty.New()
-	body := fmt.Sprintf(`{"name":%q, "password":%q}`, user.Name, user.Password)
-	resp, err := client.R().
-		SetHeader("Content-Type", "application/json").
-		SetBody(body).
-		SetResult(user).
-		Post(fmt.Sprintf("%s/api/auth/register", c.host))
+func (c *HTTPClient) Register(user models.User) error {
+	payload := models.LoginPayload{
+		Name:     user.Name,
+		Password: user.Password,
+	}
+	body, err := json.Marshal(payload)
 	if err != nil {
-		log.Fatal(err)
+		return errors.Wrap(err, "failed to marshal user payload")
+	}
+	resp, err := c.post("api/auth/register", body, user)
+	if err != nil {
+		return errors.Wrap(err, "request error")
 	}
 
 	if resp.StatusCode() != http.StatusOK {
-		errMessage := parseServerError(resp.Body())
-		color.Red("Server error: %s \nStatus code: %d", errMessage, resp.StatusCode())
-
-		return errServer
+		return errors.Wrap(err, fmt.Sprintf("bas response code from server: %d", resp.StatusCode()))
 	}
 
 	return nil

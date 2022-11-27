@@ -14,7 +14,7 @@ func NewRegisterCommand() *cobra.Command {
 		Long:  "Performs user registration",
 		Args:  cobra.ExactArgs(2),
 		Run: func(cmd *cobra.Command, args []string) {
-			client.GetApp().Register(&models.User{
+			client.GetApp().Register(models.User{
 				Name:     args[0],
 				Password: args[1],
 			})

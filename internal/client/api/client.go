@@ -2,13 +2,11 @@ package api
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
-	"log"
 	"net/http"
 
-	"github.com/fatih/color"
 	"github.com/go-resty/resty/v2"
+	"github.com/pkg/errors"
 	"golang.org/x/exp/slices"
 
 	"github.com/vleukhin/GophKeeper/internal/models"
@@ -22,8 +20,8 @@ type Client interface {
 }
 
 type AuthClient interface {
-	Login(user *models.User) (models.JWT, error)
-	Register(user *models.User) error
+	Login(user models.User) (models.JWT, error)
+	Register(user models.User) error
 }
 
 type CardsClient interface {
@@ -45,14 +43,32 @@ type NoteClient interface {
 }
 
 type HTTPClient struct {
-	host string
+	host   string
+	client *resty.Client
 }
 
 func NewHTTPClient(host string) Client {
-	return &HTTPClient{host: host}
+	return &HTTPClient{
+		host:   host,
+		client: resty.New(),
+	}
 }
 
 var errServer = errors.New("got server error")
+
+func (c *HTTPClient) post(url string, body, result interface{}) (*resty.Response, error) {
+	return c.client.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(body).
+		SetResult(&result).
+		Post(fmt.Sprintf("%s/%s", c.host, url))
+}
+func (c *HTTPClient) get(url string, result interface{}) (*resty.Response, error) {
+	return c.client.R().
+		SetHeader("Content-Type", "application/json").
+		SetResult(&result).
+		Get(fmt.Sprintf("%s/%s", c.host, url))
+}
 
 func parseServerError(body []byte) string {
 	var errMessage struct {
@@ -67,17 +83,11 @@ func parseServerError(body []byte) string {
 }
 
 func (c *HTTPClient) getEntities(models interface{}, accessToken, endpoint string) error {
-	client := resty.New()
-	client.SetAuthToken(accessToken)
-	resp, err := client.R().
-		SetResult(models).
-		Get(fmt.Sprintf("%s/%s", c.host, endpoint))
+	c.client.SetAuthToken(accessToken)
+	resp, err := c.get(endpoint, models)
 	if err != nil {
-		log.Println(err)
-
-		return err
+		return errors.Wrap(err, "request error")
 	}
-
 	if err := c.checkResCode(resp); err != nil {
 		return err
 	}
@@ -86,13 +96,12 @@ func (c *HTTPClient) getEntities(models interface{}, accessToken, endpoint strin
 }
 
 func (c *HTTPClient) delEntity(accessToken, endpoint, id string) error {
-	client := resty.New()
-	client.SetAuthToken(accessToken)
-	resp, err := client.R().
+	c.client.SetAuthToken(accessToken)
+	resp, err := c.client.R().
 		SetHeader("Content-Type", "application/json").
 		Delete(fmt.Sprintf("%s/%s/%s", c.host, endpoint, id))
 	if err != nil {
-		log.Fatalf("GophKeeperClientAPI - client.R - %v ", err)
+		return err
 	}
 	if err := c.checkResCode(resp); err != nil {
 		return errServer
@@ -110,7 +119,7 @@ func (c *HTTPClient) addEntity(models interface{}, accessToken, endpoint string)
 		SetResult(models).
 		Post(fmt.Sprintf("%s/%s", c.host, endpoint))
 	if err != nil {
-		log.Fatalf("GophKeeperClientAPI - client.R - %v ", err)
+		return err
 	}
 	if err := c.checkResCode(resp); err != nil {
 		return errServer
@@ -123,9 +132,7 @@ func (c *HTTPClient) checkResCode(resp *resty.Response) error {
 	badCodes := []int{http.StatusBadRequest, http.StatusInternalServerError, http.StatusUnauthorized}
 	if slices.Contains(badCodes, resp.StatusCode()) {
 		errMessage := parseServerError(resp.Body())
-		color.Red("Server error: %s", errMessage)
-
-		return errServer
+		return errors.New(fmt.Sprintf("Server error: %s", errMessage))
 	}
 
 	return nil

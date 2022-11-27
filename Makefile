@@ -18,4 +18,4 @@ lint:
 
 lint-fix:
 	docker run --rm -v $(CURDIR):/app -w /app golangci/golangci-lint:$(LINTER_VERSION) \
-	  golangci-lint run --fix
+	  golangci-lint run --modules-download-mode=mod --fix

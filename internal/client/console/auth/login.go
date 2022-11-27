@@ -14,7 +14,7 @@ func NewLoginCommand() *cobra.Command {
 		Long:  "Performs user login",
 		Args:  cobra.ExactArgs(2),
 		Run: func(cmd *cobra.Command, args []string) {
-			client.GetApp().Login(&models.User{
+			client.GetApp().Login(models.User{
 				Name:     args[0],
 				Password: args[1],
 			})

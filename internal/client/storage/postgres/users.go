@@ -31,7 +31,7 @@ const updateUserTokenQuery = `
 	WHERE id = $3
 `
 
-func (p Storage) UpdateUserToken(ctx context.Context, user *models.User, token *models.JWT) error {
+func (p Storage) UpdateUserToken(ctx context.Context, user models.User, token models.JWT) error {
 	_, err := p.conn.Exec(ctx, updateUserTokenQuery, token.AccessToken, token.RefreshToken, user.ID)
 	return err
 }

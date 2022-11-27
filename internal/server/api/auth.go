@@ -4,18 +4,15 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/vleukhin/GophKeeper/internal/models"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/vleukhin/GophKeeper/internal/helpers/errs"
 )
 
-type loginPayload struct {
-	Name     string `json:"name"`
-	Password string `json:"password"`
-}
-
 func (r *Router) Register(ctx *gin.Context) {
-	var payload *loginPayload
+	var payload *models.LoginPayload
 
 	if err := ctx.ShouldBindJSON(&payload); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
@@ -34,7 +31,7 @@ func (r *Router) Register(ctx *gin.Context) {
 }
 
 func (r *Router) LogIn(ctx *gin.Context) {
-	var payload *loginPayload
+	var payload *models.LoginPayload
 	if err := ctx.ShouldBindJSON(&payload); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
 
