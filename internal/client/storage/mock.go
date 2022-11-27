@@ -59,8 +59,8 @@ func (m MockStorage) MigrateDB(context.Context) error {
 	return nil
 }
 
-func (m MockStorage) AddUser(ctx context.Context, name string, password string) error {
-	return nil
+func (m MockStorage) AddUser(ctx context.Context, name string, password string) (models.User, error) {
+	return models.User{}, nil
 }
 
 func (m MockStorage) UpdateUserToken(ctx context.Context, user models.User, token models.JWT) error {

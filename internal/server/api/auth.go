@@ -22,7 +22,7 @@ func (r *Router) Register(ctx *gin.Context) {
 
 	user, err := r.uc.SignUpUser(ctx, payload.Name, payload.Password)
 	if err == nil {
-		ctx.JSON(http.StatusCreated, user)
+		ctx.JSON(http.StatusOK, user)
 
 		return
 	}

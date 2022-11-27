@@ -19,8 +19,8 @@ type (
 	}
 
 	UsersStorage interface {
-		AddUser(ctx context.Context, email, hashedPassword string) (models.User, error)
-		GetUserByName(ctx context.Context, email, hashedPassword string) (models.User, error)
+		AddUser(ctx context.Context, email, password string) (models.User, error)
+		GetUserByName(ctx context.Context, name string) (models.User, error)
 		GetUserByID(ctx context.Context, id string) (models.User, error)
 	}
 

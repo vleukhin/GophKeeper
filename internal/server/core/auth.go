@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"errors"
 	"github.com/vleukhin/GophKeeper/internal/helpers"
 	"github.com/vleukhin/GophKeeper/internal/models"
 
@@ -10,17 +11,24 @@ import (
 
 const minutesPerHour = 60
 
-func (c *Core) SignUpUser(ctx context.Context, email, password string) (user models.User, err error) {
-	hashedPassword, err := helpers.HashPassword(password)
+func (c *Core) SignUpUser(ctx context.Context, name, password string) (user models.User, err error) {
+	user, err = c.repo.GetUserByName(ctx, name)
+	if err != nil {
+		return
+	}
+	if user.Name != "" {
+		return user, errors.New("user already exists")
+	}
+	return c.repo.AddUser(ctx, name, password)
+}
+
+func (c *Core) SignInUser(ctx context.Context, email, password string) (token models.JWT, err error) {
+	user, err := c.repo.GetUserByName(ctx, email)
 	if err != nil {
 		return
 	}
 
-	return c.repo.AddUser(ctx, email, hashedPassword)
-}
-
-func (c *Core) SignInUser(ctx context.Context, email, password string) (token models.JWT, err error) {
-	user, err := c.repo.GetUserByName(ctx, email, password)
+	err = helpers.VerifyPassword(user.Password, password)
 	if err != nil {
 		return
 	}

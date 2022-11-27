@@ -24,7 +24,7 @@ func (c *Core) Login(user models.User) {
 	}
 
 	if !exists {
-		err = c.storage.AddUser(ctx, user.Name, user.Password)
+		user, err = c.storage.AddUser(ctx, user.Name, user.Password)
 		if err != nil {
 			color.Red("Storage error: %v", err)
 			return
@@ -48,14 +48,13 @@ func (c *Core) Register(user models.User) {
 		return
 	}
 
-	user.Password = hashedPassword
-	if err = c.storage.AddUser(context.Background(), user.Name, hashedPassword); err != nil {
+	if user, err = c.storage.AddUser(context.Background(), user.Name, hashedPassword); err != nil {
 		color.Red("Internal error: %v", err)
 		return
 	}
 
 	color.Green("User registered")
-	color.Green("ID: %v", user.ID)
+	color.Green("ID: %v", user.ID.String())
 	color.Green("Name: %s", user.Name)
 }
 

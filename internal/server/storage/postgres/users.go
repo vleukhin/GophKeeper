@@ -16,7 +16,11 @@ const createUserQuery = `
 	VALUES ($1, $2, $3)
 `
 
-func (p Storage) AddUser(ctx context.Context, name, hashedPassword string) (models.User, error) {
+func (p Storage) AddUser(ctx context.Context, name, password string) (models.User, error) {
+	hashedPassword, err := helpers.HashPassword(password)
+	if err != nil {
+		return models.User{}, err
+	}
 	id, err := uuid.NewUUID()
 	if err != nil {
 		return models.User{}, err
@@ -25,22 +29,18 @@ func (p Storage) AddUser(ctx context.Context, name, hashedPassword string) (mode
 	if err != nil {
 		return models.User{}, err
 	}
-	return p.GetUserByName(ctx, name, hashedPassword)
+	return p.GetUserByName(ctx, name)
 }
 
 const getUserByNameQuery = `
 	SELECT id, name, password FROM users WHERE name = $1
 `
 
-func (p Storage) GetUserByName(ctx context.Context, name, hashedPassword string) (models.User, error) {
+func (p Storage) GetUserByName(ctx context.Context, name string) (models.User, error) {
 	var user models.User
 	row := p.conn.QueryRow(ctx, getUserByNameQuery, name)
 	err := row.Scan(&user.ID, &user.Name, &user.Password)
-	if err != nil {
-		return user, err
-	}
-	err = helpers.VerifyPassword(hashedPassword, user.Password)
-	if err != nil {
+	if err != nil && err != pgx.ErrNoRows {
 		return user, err
 	}
 

@@ -14,25 +14,29 @@ const createUserQuery = `
 	VALUES ($1, $2, $3)
 `
 
-func (p Storage) AddUser(ctx context.Context, name string, password string) error {
+func (p Storage) AddUser(ctx context.Context, name string, password string) (models.User, error) {
+	var user models.User
 	id, err := uuid.NewUUID()
 	if err != nil {
-		return err
+		return user, err
 	}
 	_, err = p.conn.Exec(ctx, createUserQuery, id, name, password)
 	if err != nil {
-		return err
+		return user, err
 	}
-	return nil
+	user.ID = id
+	user.Name = name
+
+	return user, nil
 }
 
 const updateUserTokenQuery = `
 	UPDATE users SET access_token = $1, refresh_token = $2
-	WHERE id = $3
+	WHERE name = $3
 `
 
 func (p Storage) UpdateUserToken(ctx context.Context, user models.User, token models.JWT) error {
-	_, err := p.conn.Exec(ctx, updateUserTokenQuery, token.AccessToken, token.RefreshToken, user.ID)
+	_, err := p.conn.Exec(ctx, updateUserTokenQuery, token.AccessToken, token.RefreshToken, user.Name)
 	return err
 }
 
