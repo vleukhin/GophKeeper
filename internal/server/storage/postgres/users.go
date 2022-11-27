@@ -34,14 +34,8 @@ const getUserByNameQuery = `
 
 func (p Storage) GetUserByName(ctx context.Context, name, hashedPassword string) (models.User, error) {
 	var user models.User
-	row, err := p.conn.Query(ctx, getUserByNameQuery, name)
-	if err != nil {
-		if err != pgx.ErrNoRows {
-			return user, err
-		}
-		return user, nil
-	}
-	err = row.Scan(&user.ID, &user.Name, &user.Password)
+	row := p.conn.QueryRow(ctx, getUserByNameQuery, name)
+	err := row.Scan(&user.ID, &user.Name, &user.Password)
 	if err != nil {
 		return user, err
 	}

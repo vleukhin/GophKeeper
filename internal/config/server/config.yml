@@ -14,9 +14,9 @@ postgres:
 
 security:
   access_token_expired_in: '60m'
-  access_token_maxage: 60
+  access_token_maxage: '1h'
   refresh_token_expired_in: '60m'
-  refresh_token_maxage: 60
+  refresh_token_maxage: '1h'
   domain: 'localhost'
 
 cache:

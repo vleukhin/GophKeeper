@@ -14,32 +14,33 @@ type Router struct {
 
 func NewRouter(e *gin.Engine, g core.GophKeeperServer, l logger.Interface) {
 	r := &Router{g, l}
-	h := e.Group("/api", r.AuthMiddleware())
-
+	h := e.Group("/api")
 	e.GET("/health", r.HealthCheck)
 
-	h.GET("me", r.UserInfo)
+	needAuth := h.Group("", r.AuthMiddleware())
 
-	h.GET("creds", r.GetCreds)
-	h.POST("creds", r.AddCred)
-	h.DELETE("creds/:id", r.DelCred)
-	h.PATCH("creds/:id", r.UpdateCred)
+	needAuth.GET("me", r.UserInfo)
 
-	h.GET("cards", r.GetCards)
-	h.POST("cards", r.AddCard)
-	h.DELETE("cards/:id", r.DelCard)
-	h.PATCH("cards/:id", r.UpdateCard)
+	needAuth.GET("creds", r.GetCreds)
+	needAuth.POST("creds", r.AddCred)
+	needAuth.DELETE("creds/:id", r.DelCred)
+	needAuth.PATCH("creds/:id", r.UpdateCred)
 
-	h.GET("notes", r.GetNotes)
-	h.POST("notes", r.AddNote)
-	h.DELETE("notes/:id", r.DelNote)
-	h.PATCH("notes/:id", r.UpdateNote)
+	needAuth.GET("cards", r.GetCards)
+	needAuth.POST("cards", r.AddCard)
+	needAuth.DELETE("cards/:id", r.DelCard)
+	needAuth.PATCH("cards/:id", r.UpdateCard)
 
-	authAPI := h.Group("/auth")
+	needAuth.GET("notes", r.GetNotes)
+	needAuth.POST("notes", r.AddNote)
+	needAuth.DELETE("notes/:id", r.DelNote)
+	needAuth.PATCH("notes/:id", r.UpdateNote)
+
+	auth := h.Group("/auth")
 	{
-		authAPI.POST("/register", r.Register)
-		authAPI.POST("/login", r.LogIn)
-		authAPI.GET("/refresh", r.RefreshAccessToken)
-		authAPI.GET("/logout", r.LogoutUser)
+		auth.POST("/register", r.Register)
+		auth.POST("/login", r.LogIn)
+		auth.GET("/refresh", r.RefreshAccessToken)
+		auth.GET("/logout", r.LogoutUser)
 	}
 }
