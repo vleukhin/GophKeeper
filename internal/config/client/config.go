@@ -16,8 +16,9 @@ type (
 	}
 
 	App struct {
-		Name    string `yaml:"name"    env:"APP_NAME"`
-		Version string `yaml:"version" env:"APP_VERSION"`
+		Name       string `yaml:"name"    env:"APP_NAME"`
+		Version    string `yaml:"version" env:"APP_VERSION"`
+		EncryptKey string `yaml:"encrypt_key" env:"APP_ENCRYPT_KEY"`
 	}
 
 	Server struct {

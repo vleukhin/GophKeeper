@@ -28,12 +28,12 @@ func (c *Core) loadNotes(accessToken string) {
 	color.Green("Loaded %v notes", len(notes))
 }
 
-func (c *Core) StoreNote(userPassword string, note *models.Note) {
-	accessToken, err := c.authorisationCheck(userPassword)
+func (c *Core) StoreNote(note *models.Note) {
+	accessToken, err := c.authorisationCheck()
 	if err != nil {
 		log.Fatalf("Core - AddNote - %v", err)
 	}
-	c.encryptNote(userPassword, note)
+	c.encryptNote(c.cfg.EncryptKey, note)
 
 	if err = c.client.StoreNote(accessToken, note); err != nil {
 		log.Fatalf("Core - AddNote - %v", err)
@@ -46,10 +46,7 @@ func (c *Core) StoreNote(userPassword string, note *models.Note) {
 	color.Green("Text %q added, id: %v", note.Name, note.ID)
 }
 
-func (c *Core) ShowNote(userPassword, noteID string) {
-	if !c.verifyPassword(userPassword) {
-		return
-	}
+func (c *Core) ShowNote(noteID string) {
 	noteUUID, err := uuid.Parse(noteID)
 	if err != nil {
 		color.Red(err.Error())
@@ -63,7 +60,7 @@ func (c *Core) ShowNote(userPassword, noteID string) {
 		return
 	}
 
-	c.decryptNote(userPassword, &note)
+	c.decryptNote(c.cfg.EncryptKey, &note)
 	yellow := color.New(color.FgYellow).SprintFunc()
 	fmt.Printf("ID: %s\nname:%s\nText:%s\n%v\n", //nolint:forbidigo // cli printing
 		yellow(note.ID),
@@ -81,8 +78,8 @@ func (c *Core) decryptNote(userPassword string, note *models.Note) {
 	note.Text = helpers.Decrypt(userPassword, note.Text)
 }
 
-func (c *Core) DelNote(userPassword, noteID string) {
-	accessToken, err := c.authorisationCheck(userPassword)
+func (c *Core) DelNote(noteID string) {
+	accessToken, err := c.authorisationCheck()
 	if err != nil {
 		return
 	}

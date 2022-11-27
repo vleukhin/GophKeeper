@@ -15,7 +15,7 @@ import (
 type (
 	GophKeeperClient interface {
 		InitDB(ctx context.Context) error
-		Sync(userPassword string)
+		Sync()
 		SetStorage(r storage.Repo)
 		SetAPIClient(client api.Client)
 		SetConfig(cfg *client.Config)
@@ -32,19 +32,19 @@ type (
 		Logout()
 	}
 	CardsService interface {
-		StoreCard(userPassword string, card *models.Card)
-		ShowCard(userPassword, cardID string)
-		DelCard(userPassword, cardID string)
+		StoreCard(card *models.Card)
+		ShowCard(cardID string)
+		DelCard(cardID string)
 	}
 	NotesService interface {
-		StoreNote(userPassword string, note *models.Note)
-		ShowNote(userPassword, noteID string)
-		DelNote(userPassword, noteID string)
+		StoreNote(note *models.Note)
+		ShowNote(noteID string)
+		DelNote(noteID string)
 	}
 	CredService interface {
-		StoreCred(userPassword string, login *models.Cred)
-		ShowCred(userPassword, loginID string)
-		DelCred(userPassword, loginID string)
+		StoreCred(login *models.Cred)
+		ShowCred(loginID string)
+		DelCred(loginID string)
 	}
 )
 
@@ -77,10 +77,7 @@ var (
 	errToken         = errors.New("invalid token")
 )
 
-func (c *Core) Sync(userPassword string) {
-	if !c.verifyPassword(userPassword) {
-		return
-	}
+func (c *Core) Sync() {
 	token, err := c.storage.GetAccessToken(context.TODO())
 	if err != nil {
 		color.Red("Internal error: %v", err)
@@ -92,10 +89,7 @@ func (c *Core) Sync(userPassword string) {
 	c.loadNotes(token)
 }
 
-func (c *Core) authorisationCheck(userPassword string) (string, error) {
-	if !c.verifyPassword(userPassword) {
-		return "", errPasswordCheck
-	}
+func (c *Core) authorisationCheck() (string, error) {
 	accessToken, err := c.storage.GetAccessToken(context.TODO())
 	if err != nil || accessToken == "" {
 		color.Red("User should be logged")

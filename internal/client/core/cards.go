@@ -12,13 +12,13 @@ import (
 	"github.com/google/uuid"
 )
 
-func (c *Core) StoreCard(userPassword string, card *models.Card) {
-	accessToken, err := c.authorisationCheck(userPassword)
+func (c *Core) StoreCard(card *models.Card) {
+	accessToken, err := c.authorisationCheck()
 	if err != nil {
 		return
 	}
 
-	c.encryptCard(userPassword, card)
+	c.encryptCard(c.cfg.EncryptKey, card)
 
 	if err = c.client.StoreCard(accessToken, card); err != nil {
 		return
@@ -31,20 +31,20 @@ func (c *Core) StoreCard(userPassword string, card *models.Card) {
 	color.Green("Card %q added, id: %v", card.Name, card.ID)
 }
 
-func (c *Core) encryptCard(userPassword string, card *models.Card) {
-	card.Number = helpers.Encrypt(userPassword, card.Number)
-	card.SecurityCode = helpers.Encrypt(userPassword, card.SecurityCode)
-	card.ExpirationMonth = helpers.Encrypt(userPassword, card.ExpirationMonth)
-	card.ExpirationYear = helpers.Encrypt(userPassword, card.ExpirationYear)
-	card.CardHolderName = helpers.Encrypt(userPassword, card.CardHolderName)
+func (c *Core) encryptCard(key string, card *models.Card) {
+	card.Number = helpers.Encrypt(key, card.Number)
+	card.SecurityCode = helpers.Encrypt(key, card.SecurityCode)
+	card.ExpirationMonth = helpers.Encrypt(key, card.ExpirationMonth)
+	card.ExpirationYear = helpers.Encrypt(key, card.ExpirationYear)
+	card.CardHolderName = helpers.Encrypt(key, card.CardHolderName)
 }
 
-func (c *Core) decryptCard(userPassword string, card *models.Card) {
-	card.Number = helpers.Decrypt(userPassword, card.Number)
-	card.SecurityCode = helpers.Decrypt(userPassword, card.SecurityCode)
-	card.ExpirationMonth = helpers.Decrypt(userPassword, card.ExpirationMonth)
-	card.ExpirationYear = helpers.Decrypt(userPassword, card.ExpirationYear)
-	card.CardHolderName = helpers.Decrypt(userPassword, card.CardHolderName)
+func (c *Core) decryptCard(key string, card *models.Card) {
+	card.Number = helpers.Decrypt(key, card.Number)
+	card.SecurityCode = helpers.Decrypt(key, card.SecurityCode)
+	card.ExpirationMonth = helpers.Decrypt(key, card.ExpirationMonth)
+	card.ExpirationYear = helpers.Decrypt(key, card.ExpirationYear)
+	card.CardHolderName = helpers.Decrypt(key, card.CardHolderName)
 }
 
 func (c *Core) loadCards(accessToken string) {
@@ -63,10 +63,7 @@ func (c *Core) loadCards(accessToken string) {
 	color.Green("Loaded %v cards", len(cards))
 }
 
-func (c *Core) ShowCard(userPassword, cardID string) {
-	if !c.verifyPassword(userPassword) {
-		return
-	}
+func (c *Core) ShowCard(cardID string) {
 	cardUUID, err := uuid.Parse(cardID)
 	if err != nil {
 		color.Red(err.Error())
@@ -79,7 +76,7 @@ func (c *Core) ShowCard(userPassword, cardID string) {
 
 		return
 	}
-	c.decryptCard(userPassword, &card)
+	c.decryptCard(c.cfg.EncryptKey, &card)
 	yellow := color.New(color.FgYellow).SprintFunc()
 	fmt.Printf("ID: %s\nname:%s\nCardHolderName:%s\nNumber:%s\nBrand:%s\nExpiration: %s/%s\nCode%s\n%v\n", //nolint:forbidigo // cli printing
 		yellow(card.ID),
@@ -94,8 +91,8 @@ func (c *Core) ShowCard(userPassword, cardID string) {
 	)
 }
 
-func (c *Core) DelCard(userPassword, cardID string) {
-	accessToken, err := c.authorisationCheck(userPassword)
+func (c *Core) DelCard(cardID string) {
+	accessToken, err := c.authorisationCheck()
 	if err != nil {
 		return
 	}

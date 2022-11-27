@@ -28,12 +28,12 @@ func (c *Core) loadLogins(accessToken string) {
 	color.Green("Loaded %v logins", len(logins))
 }
 
-func (c *Core) StoreCred(userPassword string, login *models.Cred) {
-	accessToken, err := c.authorisationCheck(userPassword)
+func (c *Core) StoreCred(login *models.Cred) {
+	accessToken, err := c.authorisationCheck()
 	if err != nil {
 		return
 	}
-	c.encryptLogin(userPassword, login)
+	c.encryptLogin(c.cfg.EncryptKey, login)
 
 	if err = c.client.AddCred(accessToken, login); err != nil {
 		color.Red(err.Error())
@@ -48,10 +48,7 @@ func (c *Core) StoreCred(userPassword string, login *models.Cred) {
 	color.Green("Login %q added, id: %v", login.Name, login.ID)
 }
 
-func (c *Core) ShowCred(userPassword, loginID string) {
-	if !c.verifyPassword(userPassword) {
-		return
-	}
+func (c *Core) ShowCred(loginID string) {
 	loginUUID, err := uuid.Parse(loginID)
 	if err != nil {
 		color.Red(err.Error())
@@ -63,7 +60,7 @@ func (c *Core) ShowCred(userPassword, loginID string) {
 		return
 	}
 
-	c.decryptLogin(userPassword, &cred)
+	c.decryptLogin(c.cfg.EncryptKey, &cred)
 	yellow := color.New(color.FgYellow).SprintFunc()
 	fmt.Printf("ID: %s\nname:%s\nURI:%s\nLogin:%s\nPassword:%s\n%v\n",
 		yellow(cred.ID),
@@ -85,8 +82,8 @@ func (c *Core) decryptLogin(userPassword string, login *models.Cred) {
 	login.Password = helpers.Decrypt(userPassword, login.Password)
 }
 
-func (c *Core) DelCred(userPassword, loginID string) {
-	accessToken, err := c.authorisationCheck(userPassword)
+func (c *Core) DelCred(loginID string) {
+	accessToken, err := c.authorisationCheck()
 	if err != nil {
 		return
 	}

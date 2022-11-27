@@ -15,16 +15,15 @@ var StoreNote = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
 	Short: "Add note",
 	Long: `
 This command add user note
-Usage: addnote -p \"user_password\" 
+Usage: addnote
 Flags:
-  -h, --help              help for addlogin
-  -p, --password string   User password value.
+  -h, --help            help for addlogin
   -n, --note string     User note  
-  -meta 				  Add meta data for entiry
+  -meta 				Add meta data for entiry
   example: -meta'[{"name":"some_meta","value":"some_meta_value"},{"name":"some_meta2","value":"some_meta_value2"}]'
   `,
 	Run: func(cmd *cobra.Command, args []string) {
-		client.GetApp().StoreNote(userPassword, &newNote)
+		client.GetApp().StoreNote(&newNote)
 	},
 }
 
@@ -34,15 +33,10 @@ var (
 )
 
 func init() {
-	StoreNote.Flags().StringVarP(&userPassword, "password", "p", "", "User password value.")
-
 	StoreNote.Flags().StringVarP(&newNote.Name, "title", "t", "", "Login title")
 	StoreNote.Flags().StringVarP(&newNote.Text, "note", "n", "", "User note")
 	StoreNote.Flags().Var(&console.JSONFlag{Target: &newNote.Meta}, "meta", `Add meta fields for models`)
 
-	if err := StoreNote.MarkFlagRequired("password"); err != nil {
-		log.Fatal(err)
-	}
 	if err := StoreNote.MarkFlagRequired("title"); err != nil {
 		log.Fatal(err)
 	}

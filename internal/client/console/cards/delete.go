@@ -15,22 +15,17 @@ var DelCard = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
 This command remove newCard
 Usage: delcard -i \"card_id\" 
 Flags:
-  -i, --id string Card id
-  -p, --password string   User password value.`,
+  -i, --id string Card id`,
 	Run: func(cmd *cobra.Command, args []string) {
-		client.GetApp().DelCard(userPassword, delCardID)
+		client.GetApp().DelCard(delCardID)
 	},
 }
 
 var delCardID string //nolint:gochecknoglobals // cobra style guide
 
 func init() {
-	DelCard.Flags().StringVarP(&userPassword, "password", "p", "", "User password value.")
 	DelCard.Flags().StringVarP(&delCardID, "id", "i", "", "Card id")
 
-	if err := DelCard.MarkFlagRequired("password"); err != nil {
-		log.Fatal(err)
-	}
 	if err := DelCard.MarkFlagRequired("id"); err != nil {
 		log.Fatal(err)
 	}

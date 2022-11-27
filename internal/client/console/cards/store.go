@@ -15,7 +15,7 @@ var StoreCard = &cobra.Command{ //nolint:gochecknoglobals // cobra style guide
 	Short: "Store newCard",
 	Long: `
 This command store newCard
-Usage: storecard -p \"user_password\" 
+Usage: storecard
 Flags:
   -b, --bank string       Card issuer bank
   -c, --code string       Card code
@@ -23,24 +23,21 @@ Flags:
   -m, --month string      Card expiration month
   -n, --number string     Card number
   -o, --owner string      Card holder name
-  -p, --password string   User password value.
   -t, --title string      Card title
   -y, --year string       Card expiration year
   -meta 				  Store meta data for entry
   example: -meta'[{"name":"some_meta","value":"some_meta_value"},{"name":"some_meta2","value":"some_meta_value2"}]'
   `,
 	Run: func(cmd *cobra.Command, args []string) {
-		client.GetApp().StoreCard(userPassword, &newCard)
+		client.GetApp().StoreCard(&newCard)
 	},
 }
 
 var (
-	newCard      models.Card //nolint:gochecknoglobals // cobra style guide
-	userPassword string      //nolint:gochecknoglobals // cobra style guide
+	newCard models.Card //nolint:gochecknoglobals // cobra style guide
 )
 
 func init() {
-	StoreCard.Flags().StringVarP(&userPassword, "password", "p", "", "User password value.")
 	StoreCard.Flags().StringVarP(&newCard.Name, "title", "t", "", "Card title")
 	StoreCard.Flags().StringVarP(&newCard.Number, "number", "n", "", "Card number")
 	StoreCard.Flags().StringVarP(&newCard.CardHolderName, "owner", "o", "", "Card holder name")
@@ -50,16 +47,10 @@ func init() {
 	StoreCard.Flags().StringVarP(&newCard.ExpirationYear, "year", "y", "", "Card expiration year")
 	StoreCard.Flags().Var(&console.JSONFlag{Target: &newCard.Meta}, "meta", `Store meta fields for models`)
 
-	if err := StoreCard.MarkFlagRequired("password"); err != nil {
-		log.Fatal(err)
-	}
 	if err := StoreCard.MarkFlagRequired("title"); err != nil {
 		log.Fatal(err)
 	}
 	if err := StoreCard.MarkFlagRequired("number"); err != nil {
-		log.Fatal(err)
-	}
-	if err := StoreCard.MarkFlagRequired("password"); err != nil {
 		log.Fatal(err)
 	}
 }
