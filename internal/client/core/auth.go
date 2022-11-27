@@ -60,7 +60,7 @@ func (c *Core) Register(user models.User) {
 }
 
 func (c *Core) Logout() {
-	if err := c.storage.DropUserToken(context.Background(), nil); err != nil {
+	if err := c.storage.DropUserToken(context.Background()); err != nil {
 		color.Red("Storage error: %v", err)
 		return
 	}
@@ -69,7 +69,7 @@ func (c *Core) Logout() {
 }
 
 func (c *Core) verifyPassword(userPassword string) bool {
-	hash, err := c.storage.GetUserPasswordHash(context.Background(), nil)
+	hash, err := c.storage.GetUserPasswordHash(context.Background())
 	if err != nil {
 		color.Red("Storage error: %v", err)
 		return false

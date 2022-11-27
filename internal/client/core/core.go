@@ -81,7 +81,7 @@ func (c *Core) Sync(userPassword string) {
 	if !c.verifyPassword(userPassword) {
 		return
 	}
-	token, err := c.storage.GetAccessToken(context.TODO(), nil)
+	token, err := c.storage.GetAccessToken(context.TODO())
 	if err != nil {
 		color.Red("Internal error: %v", err)
 
@@ -96,7 +96,7 @@ func (c *Core) authorisationCheck(userPassword string) (string, error) {
 	if !c.verifyPassword(userPassword) {
 		return "", errPasswordCheck
 	}
-	accessToken, err := c.storage.GetAccessToken(context.TODO(), nil)
+	accessToken, err := c.storage.GetAccessToken(context.TODO())
 	if err != nil || accessToken == "" {
 		color.Red("User should be logged")
 

@@ -41,8 +41,8 @@ const dropUserTokenQuery = `
 	WHERE id = $3
 `
 
-func (p Storage) DropUserToken(ctx context.Context, user *models.User) error {
-	_, err := p.conn.Exec(ctx, dropUserTokenQuery, user.ID)
+func (p Storage) DropUserToken(ctx context.Context) error {
+	_, err := p.conn.Exec(ctx, dropUserTokenQuery)
 	return err
 }
 
@@ -50,9 +50,9 @@ const getAccessTokenQuery = `
 	SELECT access_token FROM users WHERE id = $1
 `
 
-func (p Storage) GetAccessToken(ctx context.Context, user *models.User) (string, error) {
+func (p Storage) GetAccessToken(ctx context.Context) (string, error) {
 	var token string
-	row := p.conn.QueryRow(ctx, getAccessTokenQuery, user.ID)
+	row := p.conn.QueryRow(ctx, getAccessTokenQuery)
 	err := row.Scan(&token)
 	if err != nil {
 		return "", err
@@ -79,9 +79,9 @@ const getUserPasswordHashQuery = `
 	SELECT password FROM users WHERE id = $1
 `
 
-func (p Storage) GetUserPasswordHash(ctx context.Context, user *models.User) (string, error) {
+func (p Storage) GetUserPasswordHash(ctx context.Context) (string, error) {
 	var password string
-	row := p.conn.QueryRow(ctx, getUserPasswordHashQuery, user.ID)
+	row := p.conn.QueryRow(ctx, getUserPasswordHashQuery)
 	err := row.Scan(&password)
 	if err != nil {
 		return "", err

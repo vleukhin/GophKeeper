@@ -67,11 +67,11 @@ func (m MockStorage) UpdateUserToken(ctx context.Context, user models.User, toke
 	return nil
 }
 
-func (m MockStorage) DropUserToken(context.Context, *models.User) error {
+func (m MockStorage) DropUserToken(context.Context) error {
 	return nil
 }
 
-func (m MockStorage) GetAccessToken(context.Context, *models.User) (string, error) {
+func (m MockStorage) GetAccessToken(context.Context) (string, error) {
 	return "", nil
 }
 
@@ -79,7 +79,7 @@ func (m MockStorage) UserExists(ctx context.Context, name string) (bool, error) 
 	return false, nil
 }
 
-func (m MockStorage) GetUserPasswordHash(context.Context, *models.User) (string, error) {
+func (m MockStorage) GetUserPasswordHash(context.Context) (string, error) {
 	return "", nil
 }
 
