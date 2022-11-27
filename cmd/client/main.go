@@ -77,7 +77,7 @@ func initApp() {
 	app.SetStorage(repo)
 	app.SetConfig(cfg)
 	app.SetAPIClient(api.NewHTTPClient(cfg.Server.URL))
-	err = app.InitDB(context.TODO())
+	err = app.InitDB(context.Background())
 	if err != nil {
 		log.Fatal(err.Error())
 	}
