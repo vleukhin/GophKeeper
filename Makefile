@@ -13,12 +13,9 @@ up:
 
 lint:
 	docker run --rm -v $(CURDIR):/app -w /app golangci/golangci-lint:$(LINTER_VERSION) \
-      golangci-lint run --out-format code-climate --path-prefix src/ -c .golangci.yml | \
+      golangci-lint run --modules-download-mode=mod --out-format code-climate --path-prefix src/ -c .golangci.yml | \
       jq -r '.[] | "\(.location.path):\(.location.lines.begin) \(.description)"'
 
 lint-fix:
 	docker run --rm -v $(CURDIR):/app -w /app golangci/golangci-lint:$(LINTER_VERSION) \
 	  golangci-lint run --fix
-
-vet:
-	go vet ./...

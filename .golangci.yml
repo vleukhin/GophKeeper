@@ -109,6 +109,7 @@ linters:
     - staticcheck
     - funlen
     - goconst
+    - govet
 
   fast: false
 
