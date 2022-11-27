@@ -59,7 +59,7 @@ func (c *Core) Register(user models.User) {
 }
 
 func (c *Core) Logout() {
-	if err := c.storage.DropUserToken(context.Background()); err != nil {
+	if err := c.storage.DropUser(context.Background()); err != nil {
 		color.Red("Storage error: %v", err)
 		return
 	}

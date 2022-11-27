@@ -67,7 +67,7 @@ func (m MockStorage) UpdateUserToken(ctx context.Context, user models.User, toke
 	return nil
 }
 
-func (m MockStorage) DropUserToken(context.Context) error {
+func (m MockStorage) DropUser(context.Context) error {
 	return nil
 }
 

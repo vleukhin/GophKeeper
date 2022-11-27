@@ -40,13 +40,12 @@ func (p Storage) UpdateUserToken(ctx context.Context, user models.User, token mo
 	return err
 }
 
-const dropUserTokenQuery = `
-	UPDATE users SET access_token = '', refresh_token = ''
-	WHERE id = $3
+const dropUserQuery = `
+	DROP FROM users
 `
 
-func (p Storage) DropUserToken(ctx context.Context) error {
-	_, err := p.conn.Exec(ctx, dropUserTokenQuery)
+func (p Storage) DropUser(ctx context.Context) error {
+	_, err := p.conn.Exec(ctx, dropUserQuery)
 	return err
 }
 
