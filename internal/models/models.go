@@ -51,6 +51,7 @@ type File struct {
 	ID       uuid.UUID `json:"uuid"`
 	Name     string    `json:"name"`
 	FileName string    `json:"file_name"`
+	Content  []byte    `json:"content"`
 	Meta     []Meta    `json:"meta"`
 }
 

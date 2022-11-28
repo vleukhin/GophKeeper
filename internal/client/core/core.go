@@ -24,6 +24,7 @@ type (
 		CardsService
 		NotesService
 		CredService
+		FilesService
 	}
 
 	AuthService interface {
@@ -45,6 +46,11 @@ type (
 		StoreCred(login *models.Cred)
 		ShowCred(loginID string)
 		DelCred(loginID string)
+	}
+	FilesService interface {
+		StoreFile(file models.File)
+		GetFile(fileID, filePath string)
+		DelFile(fileID string)
 	}
 )
 

@@ -11,6 +11,31 @@ import (
 type MockStorage struct {
 }
 
+func (m MockStorage) LoadFiles(ctx context.Context) ([]models.File, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m MockStorage) SaveFiles(ctx context.Context, files []models.File) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m MockStorage) AddFile(ctx context.Context, file models.File) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m MockStorage) GetFileByID(ctx context.Context, fileID uuid.UUID) (models.File, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (m MockStorage) DelFile(ctx context.Context, fileID uuid.UUID) error {
+	//TODO implement me
+	panic("implement me")
+}
+
 func NewMockStorage() *MockStorage {
 	return &MockStorage{}
 }

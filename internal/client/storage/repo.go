@@ -15,6 +15,7 @@ type Repo interface {
 	CardStorage
 	CredRepo
 	NotesRepo
+	FilesRepo
 }
 
 type UserRepo interface {
@@ -48,4 +49,12 @@ type NotesRepo interface {
 	AddNote(context.Context, models.Note) error
 	GetNoteByID(ctx context.Context, notedID uuid.UUID) (models.Note, error)
 	DelNote(ctx context.Context, noteID uuid.UUID) error
+}
+
+type FilesRepo interface {
+	LoadFiles(context.Context) ([]models.File, error)
+	SaveFiles(context.Context, []models.File) error
+	AddFile(context.Context, models.File) error
+	GetFileByID(ctx context.Context, fileID uuid.UUID) (models.File, error)
+	DelFile(ctx context.Context, fileID uuid.UUID) error
 }

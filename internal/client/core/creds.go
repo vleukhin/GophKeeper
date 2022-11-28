@@ -20,7 +20,7 @@ func (c *Core) loadLogins(accessToken string) {
 		return
 	}
 
-	if err = c.storage.SaveCreds(context.TODO(), logins); err != nil {
+	if err = c.storage.SaveCreds(context.Background(), logins); err != nil {
 		log.Println(err)
 
 		return
@@ -40,7 +40,7 @@ func (c *Core) StoreCred(login *models.Cred) {
 		return
 	}
 
-	if err = c.storage.AddCred(context.TODO(), *login); err != nil {
+	if err = c.storage.AddCred(context.Background(), *login); err != nil {
 		color.Red(err.Error())
 		return
 	}
@@ -54,7 +54,7 @@ func (c *Core) ShowCred(loginID string) {
 		color.Red(err.Error())
 		return
 	}
-	cred, err := c.storage.GetCredByID(context.TODO(), loginUUID)
+	cred, err := c.storage.GetCredByID(context.Background(), loginUUID)
 	if err != nil {
 		color.Red(err.Error())
 		return

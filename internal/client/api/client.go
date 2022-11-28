@@ -15,6 +15,7 @@ type Client interface {
 	CardsClient
 	CredsClient
 	NoteClient
+	FilesClient
 }
 
 type AuthClient interface {
@@ -38,6 +39,12 @@ type NoteClient interface {
 	GetNotes(accessToken string) ([]models.Note, error)
 	StoreNote(accessToken string, note *models.Note) error
 	DelNote(accessToken, noteID string) error
+}
+
+type FilesClient interface {
+	GetFiles(accessToken string) ([]models.File, error)
+	StoreFile(accessToken string, note models.File) error
+	DelFile(accessToken, fileID string) error
 }
 
 type HTTPClient struct {
