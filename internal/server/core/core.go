@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"mime/multipart"
 
 	"github.com/google/uuid"
 
@@ -33,6 +34,11 @@ type GophKeeperServer interface {
 	AddNote(ctx context.Context, note *models.Note, userID uuid.UUID) error
 	DelNote(ctx context.Context, noteID, userID uuid.UUID) error
 	UpdateNote(ctx context.Context, note *models.Note, userID uuid.UUID) error
+
+	GetFiles(ctx context.Context, user models.User) ([]models.File, error)
+	AddFile(ctx context.Context, binary models.File, file *multipart.FileHeader, userID uuid.UUID) error
+	GetFile(ctx context.Context, currentUser models.User, binaryUUID uuid.UUID) (string, error)
+	DelFile(ctx context.Context, currentUser models.User, binaryUUID uuid.UUID) error
 }
 
 type Core struct {

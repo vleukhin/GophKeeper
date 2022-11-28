@@ -24,17 +24,21 @@ func NewRouter(e *gin.Engine, g core.GophKeeperServer, l logger.Interface) {
 	needAuth.GET("creds", r.GetCreds)
 	needAuth.POST("creds", r.AddCred)
 	needAuth.DELETE("creds/:id", r.DelCred)
-	needAuth.PATCH("creds/:id", r.UpdateCred)
+	needAuth.POST("creds/:id", r.UpdateCred)
 
 	needAuth.GET("cards", r.GetCards)
 	needAuth.POST("cards", r.AddCard)
 	needAuth.DELETE("cards/:id", r.DelCard)
-	needAuth.PATCH("cards/:id", r.UpdateCard)
+	needAuth.POST("cards/:id", r.UpdateCard)
 
 	needAuth.GET("notes", r.GetNotes)
 	needAuth.POST("notes", r.AddNote)
 	needAuth.DELETE("notes/:id", r.DelNote)
-	needAuth.PATCH("notes/:id", r.UpdateNote)
+	needAuth.POST("notes/:id", r.UpdateNote)
+
+	needAuth.GET("files", r.GetFiles)
+	needAuth.POST("files", r.AddFile)
+	needAuth.DELETE("files/:id", r.DelFile)
 
 	auth := h.Group("/auth")
 	{

@@ -47,6 +47,13 @@ type Note struct {
 	Meta []Meta    `json:"meta"`
 }
 
+type File struct {
+	ID       uuid.UUID `json:"uuid"`
+	Name     string    `json:"name"`
+	FileName string    `json:"file_name"`
+	Meta     []Meta    `json:"meta"`
+}
+
 type Meta struct {
 	ID    uuid.UUID `json:"uuid"`
 	Name  string    `json:"name"`

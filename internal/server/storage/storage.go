@@ -16,6 +16,7 @@ type (
 		CredsStorage
 		CardsStorage
 		NotesStorage
+		FileStorage
 	}
 
 	UsersStorage interface {
@@ -46,5 +47,12 @@ type (
 		DelNote(ctx context.Context, noteID, userID uuid.UUID) error
 		UpdateNote(ctx context.Context, note *models.Note, userID uuid.UUID) error
 		IsNoteOwner(ctx context.Context, noteID, userID uuid.UUID) bool
+	}
+
+	FileStorage interface {
+		GetFiles(ctx context.Context, user models.User) ([]models.File, error)
+		AddFile(ctx context.Context, binary models.File, userID uuid.UUID) error
+		GetFile(ctx context.Context, binaryID, userID uuid.UUID) (models.File, error)
+		DelFile(ctx context.Context, user models.User, binaryUUID uuid.UUID) error
 	}
 )
