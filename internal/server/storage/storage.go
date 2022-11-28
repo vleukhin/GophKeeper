@@ -52,7 +52,7 @@ type (
 	FileStorage interface {
 		GetFiles(ctx context.Context, user models.User) ([]models.File, error)
 		AddFile(ctx context.Context, binary models.File, userID uuid.UUID) error
-		GetFile(ctx context.Context, binaryID, userID uuid.UUID) (models.File, error)
 		DelFile(ctx context.Context, user models.User, binaryUUID uuid.UUID) error
+		IsFileOwner(ctx context.Context, fileUUID, userID uuid.UUID) bool
 	}
 )

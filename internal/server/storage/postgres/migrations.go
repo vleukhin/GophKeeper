@@ -44,3 +44,13 @@ CREATE TABLE IF NOT EXISTS notes
     Meta jsonb
 );
 `
+const createFilesTableQuery = `
+CREATE TABLE IF NOT EXISTS files
+(
+    id uuid not null constraint files_pk primary key,
+    user_id uuid,
+    name varchar,
+    fileName varchar,
+    Meta jsonb
+);
+`

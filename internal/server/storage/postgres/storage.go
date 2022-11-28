@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -31,8 +32,10 @@ func (p Storage) Migrate(ctx context.Context) error {
 		createCredsTableQuery,
 		createCardsTableQuery,
 		createNotesTableQuery,
+		createFilesTableQuery,
 	}
 	for _, m := range migrations {
+		fmt.Println(m)
 		_, err := p.conn.Query(ctx, m)
 		if err != nil {
 			return err
