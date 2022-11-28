@@ -1,4 +1,4 @@
-LINTER_VERSION := "v1.48.0"
+LINTER_VERSION := "v1.50.1"
 
 build: build-client build-server
 

@@ -131,7 +131,7 @@ func (c *HTTPClient) addEntity(models interface{}, accessToken, endpoint string)
 func (c *HTTPClient) checkResCode(resp *resty.Response) error {
 	if resp.StatusCode() != http.StatusOK && resp.StatusCode() != http.StatusAccepted {
 		errMessage := parseServerError(resp.Body())
-		return errors.New(fmt.Sprintf("Server error: %s", errMessage))
+		return fmt.Errorf("server error: %s", errMessage)
 	}
 
 	return nil
