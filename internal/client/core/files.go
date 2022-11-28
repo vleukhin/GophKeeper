@@ -3,11 +3,13 @@ package core
 import (
 	"context"
 	"fmt"
+	"os"
+
 	"github.com/fatih/color"
 	"github.com/google/uuid"
+
 	"github.com/vleukhin/GophKeeper/internal/helpers"
 	"github.com/vleukhin/GophKeeper/internal/models"
-	"os"
 )
 
 func (c *Core) StoreFile(file models.File) {

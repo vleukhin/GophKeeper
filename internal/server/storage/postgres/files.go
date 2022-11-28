@@ -2,7 +2,9 @@ package postgres
 
 import (
 	"context"
+
 	"github.com/google/uuid"
+
 	"github.com/vleukhin/GophKeeper/internal/helpers/errs"
 	"github.com/vleukhin/GophKeeper/internal/models"
 )

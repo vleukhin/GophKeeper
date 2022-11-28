@@ -28,8 +28,7 @@ Flags:
 }
 
 var (
-	newNote      models.Note //nolint:gochecknoglobals // cobra style guide
-	userPassword string      //nolint:gochecknoglobals // cobra style guide
+	newNote models.Note //nolint:gochecknoglobals // cobra style guide
 )
 
 func init() {

@@ -3,9 +3,11 @@ package core
 import (
 	"context"
 	"fmt"
-	"github.com/google/uuid"
-	"github.com/vleukhin/GophKeeper/internal/models"
 	"os"
+
+	"github.com/google/uuid"
+
+	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
 func (c *Core) GetFiles(ctx context.Context, user models.User) ([]models.File, error) {

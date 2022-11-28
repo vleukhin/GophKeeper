@@ -66,17 +66,3 @@ func (c *Core) Logout() {
 
 	color.Green("Users tokens were dropped")
 }
-
-func (c *Core) verifyPassword(userPassword string) bool {
-	hash, err := c.storage.GetUserPasswordHash(context.Background())
-	if err != nil {
-		color.Red("Storage error: %v", err)
-		return false
-	}
-	if err := helpers.VerifyPassword(hash, userPassword); err != nil {
-		color.Red("Password check status: failed")
-		return false
-	}
-
-	return true
-}

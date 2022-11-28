@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 
 	config "github.com/vleukhin/GophKeeper/internal/config/server"
@@ -34,8 +35,8 @@ type GophKeeperServer interface {
 	UpdateNote(ctx context.Context, note *models.Note, userID uuid.UUID) error
 
 	GetFiles(ctx context.Context, user models.User) ([]models.File, error)
-	AddFile(ctx context.Context, binary models.File, userID uuid.UUID) error
-	DelFile(ctx context.Context, currentUser models.User, binaryUUID uuid.UUID) error
+	AddFile(ctx context.Context, file models.File, userID uuid.UUID) error
+	DelFile(ctx context.Context, user models.User, fileUUID uuid.UUID) error
 }
 
 type Core struct {

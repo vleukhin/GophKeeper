@@ -79,8 +79,7 @@ func (c *Core) InitDB(ctx context.Context) error {
 }
 
 var (
-	errPasswordCheck = errors.New("invalid password")
-	errToken         = errors.New("invalid token")
+	errToken = errors.New("invalid token")
 )
 
 func (c *Core) Sync() {

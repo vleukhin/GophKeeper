@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/pkg/errors"
+
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
@@ -128,7 +129,7 @@ func (c *HTTPClient) addEntity(models interface{}, accessToken, endpoint string)
 }
 
 func (c *HTTPClient) checkResCode(resp *resty.Response) error {
-	if resp.StatusCode() != http.StatusOK {
+	if resp.StatusCode() != http.StatusOK && resp.StatusCode() != http.StatusAccepted {
 		errMessage := parseServerError(resp.Body())
 		return errors.New(fmt.Sprintf("Server error: %s", errMessage))
 	}

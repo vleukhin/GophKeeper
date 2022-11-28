@@ -31,6 +31,7 @@ func (p Storage) MigrateDB(ctx context.Context) error {
 		createCredsTableQuery,
 		createCardsTableQuery,
 		createNotesTableQuery,
+		createFilesTableQuery,
 	}
 	for _, m := range migrations {
 		_, err := p.conn.Query(ctx, m)
