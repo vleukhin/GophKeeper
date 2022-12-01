@@ -12,20 +12,13 @@ const createUserQuery = `
 	VALUES ($1, $2, $3, $4)
 `
 
-func (p Storage) AddUser(ctx context.Context, name string, token models.JWT) (models.User, error) {
-	var user models.User
-	id, err := uuid.NewUUID()
+func (p Storage) AddUser(ctx context.Context, id uuid.UUID, name string, token models.JWT) error {
+	_, err := p.conn.Exec(ctx, createUserQuery, id, name, token.AccessToken, token.RefreshToken)
 	if err != nil {
-		return user, err
+		return err
 	}
-	_, err = p.conn.Exec(ctx, createUserQuery, id, name, token.AccessToken, token.RefreshToken)
-	if err != nil {
-		return user, err
-	}
-	user.ID = id
-	user.Name = name
 
-	return user, nil
+	return nil
 }
 
 const dropUserQuery = `

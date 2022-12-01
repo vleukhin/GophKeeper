@@ -51,7 +51,7 @@ const storeNoteQuery = `
 `
 
 func (p Storage) AddNote(ctx context.Context, note models.Note) error {
-	_, err := p.conn.Exec(ctx, storeNoteQuery, note.ID, note.Text, note.Meta)
+	_, err := p.conn.Exec(ctx, storeNoteQuery, note.ID, note.Name, note.Text, note.Meta)
 	return err
 }
 

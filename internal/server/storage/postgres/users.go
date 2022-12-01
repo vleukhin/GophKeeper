@@ -48,20 +48,13 @@ func (p Storage) GetUserByName(ctx context.Context, name string) (models.User, e
 }
 
 const getUserByIDQuery = `
-	SELECT * FROM users WHERE id = $1
+	SELECT id, name FROM users WHERE id = $1
 `
 
 func (p Storage) GetUserByID(ctx context.Context, id string) (models.User, error) {
 	var user models.User
-	row, err := p.conn.Query(ctx, getUserByIDQuery, id)
-	if err != nil {
-		if err != pgx.ErrNoRows {
-			return user, err
-		}
-		return user, nil
-	}
-
-	err = row.Scan(user.ID, user.Name, user.Password)
+	row := p.conn.QueryRow(ctx, getUserByIDQuery, id)
+	err := row.Scan(&user.ID, &user.Name)
 	if err != nil {
 		return user, err
 	}

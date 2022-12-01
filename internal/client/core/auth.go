@@ -8,7 +8,7 @@ import (
 
 func (c *Core) Login(name, password string) {
 	ctx := context.Background()
-	token, err := c.client.Login(name, password)
+	user, token, err := c.client.Login(name, password)
 
 	if err != nil {
 		color.Red("Failed to log in user: %v", err)
@@ -18,7 +18,7 @@ func (c *Core) Login(name, password string) {
 		color.Red("Storage error: %v", err)
 		return
 	}
-	user, err := c.storage.AddUser(ctx, name, token)
+	err = c.storage.AddUser(ctx, user.ID, name, token)
 	if err != nil {
 		color.Red("Storage error: %v", err)
 		return
@@ -39,7 +39,7 @@ func (c *Core) Register(name, password string) {
 		return
 	}
 
-	user, err = c.storage.AddUser(ctx, user.Name, token)
+	err = c.storage.AddUser(ctx, user.ID, user.Name, token)
 	if err != nil {
 		color.Red("Internal error: %v", err)
 		return

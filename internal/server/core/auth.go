@@ -3,7 +3,7 @@ package core
 import (
 	"context"
 	"errors"
-
+	"github.com/rs/zerolog/log"
 	"github.com/vleukhin/GophKeeper/internal/helpers"
 	"github.com/vleukhin/GophKeeper/internal/models"
 
@@ -84,8 +84,8 @@ func (c *Core) CheckAccessToken(ctx context.Context, accessToken string) (models
 	}
 
 	user, err = c.repo.GetUserByID(ctx, userID)
-
 	if err != nil {
+		log.Error().Err(err)
 		return user, errs.ErrTokenValidation
 	}
 

@@ -19,7 +19,7 @@ type Repo interface {
 }
 
 type UserRepo interface {
-	AddUser(ctx context.Context, name string, token models.JWT) (models.User, error)
+	AddUser(ctx context.Context, id uuid.UUID, name string, token models.JWT) error
 	DropUser(ctx context.Context) error
 	GetAccessToken(ctx context.Context) (string, error)
 }

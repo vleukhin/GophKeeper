@@ -20,7 +20,7 @@ type Client interface {
 }
 
 type AuthClient interface {
-	Login(name, password string) (models.JWT, error)
+	Login(name, password string) (models.User, models.JWT, error)
 	Register(name, password string) (models.User, models.JWT, error)
 }
 

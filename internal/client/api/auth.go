@@ -2,34 +2,32 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/pkg/errors"
-
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
-func (c *HTTPClient) Login(name, password string) (models.JWT, error) {
-	var token models.JWT
+func (c *HTTPClient) Login(name, password string) (models.User, models.JWT, error) {
+	var response models.AuthResponse
 	payload := models.LoginPayload{
 		Name:     name,
 		Password: password,
 	}
 	body, err := json.Marshal(payload)
 	if err != nil {
-		return token, errors.Wrap(err, "failed to marshal user payload")
+		return models.User{}, models.JWT{}, err
 	}
-	resp, err := c.post("api/auth/login", body, &token)
+	resp, err := c.post("api/auth/login", body, &response)
 	if err != nil {
-		return token, errors.Wrap(err, "request error")
+		return models.User{}, models.JWT{}, err
 	}
 	if err := c.checkResCode(resp); err != nil {
-		return token, err
+		return models.User{}, models.JWT{}, err
 	}
 
-	return token, nil
+	return response.User, response.Token, nil
 }
 
 func (c *HTTPClient) Register(name, password string) (models.User, models.JWT, error) {
-	var response models.RegisterResponse
+	var response models.AuthResponse
 	payload := models.LoginPayload{
 		Name:     name,
 		Password: password,

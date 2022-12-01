@@ -25,7 +25,7 @@ func (r *Router) Register(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, models.RegisterResponse{
+	ctx.JSON(http.StatusOK, models.AuthResponse{
 		User:  user,
 		Token: token,
 	})

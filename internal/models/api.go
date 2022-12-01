@@ -9,7 +9,7 @@ type ErrMessage struct {
 	Message string `json:"error"`
 }
 
-type RegisterResponse struct {
+type AuthResponse struct {
 	User  User `json:"user"`
 	Token JWT  `json:"token"`
 }
