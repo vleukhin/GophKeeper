@@ -13,6 +13,7 @@ import (
 )
 
 func (c *Core) StoreFile(file models.File) {
+	file.ID = uuid.New()
 	accessToken, err := c.authorisationCheck()
 	if err != nil {
 		return

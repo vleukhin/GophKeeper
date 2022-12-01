@@ -23,6 +23,7 @@ func (c *Core) SignUpUser(ctx context.Context, name, password string) (models.Us
 		return user, models.JWT{}, errors.New("user already exists")
 	}
 	user, err = c.repo.AddUser(ctx, name, password)
+
 	token, err := c.createToken(user)
 	if err != nil {
 		return user, token, err
@@ -31,16 +32,21 @@ func (c *Core) SignUpUser(ctx context.Context, name, password string) (models.Us
 	return user, token, nil
 }
 
-func (c *Core) SignInUser(ctx context.Context, email, password string) (models.JWT, error) {
-	user, err := c.repo.GetUserByName(ctx, email)
+func (c *Core) SignInUser(ctx context.Context, name, password string) (models.User, models.JWT, error) {
+	user, err := c.repo.GetUserByName(ctx, name)
 	if err != nil {
-		return models.JWT{}, err
+		return user, models.JWT{}, err
+	}
+	err = helpers.VerifyPassword(user.Password, password)
+	if err != nil {
+		return user, models.JWT{}, err
 	}
 	if helpers.IsEmptyUUID(user.ID) {
-		return models.JWT{}, errors.New("user not found")
+		return user, models.JWT{}, err
 	}
 
-	return c.createToken(user)
+	token, err := c.createToken(user)
+	return user, token, err
 }
 
 func (c *Core) RefreshAccessToken(ctx context.Context, refreshToken string) (token models.JWT, err error) {

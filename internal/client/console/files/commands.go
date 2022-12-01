@@ -1,9 +1,11 @@
 package files
 
 import (
-	"github.com/vleukhin/GophKeeper/internal/client/console"
 	"log"
 	"os"
+	"path/filepath"
+
+	"github.com/vleukhin/GophKeeper/internal/client/console"
 
 	"github.com/vleukhin/GophKeeper/internal/client"
 	"github.com/vleukhin/GophKeeper/internal/models"
@@ -35,6 +37,7 @@ Flags:
 			}
 
 			newFile.Content = content
+			newFile.FileName = filepath.Base(filePath)
 			client.GetApp().StoreFile(newFile)
 		},
 	}

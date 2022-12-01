@@ -29,8 +29,6 @@ func (r *Router) Register(ctx *gin.Context) {
 		User:  user,
 		Token: token,
 	})
-	return
-
 }
 
 func (r *Router) LogIn(ctx *gin.Context) {
@@ -41,10 +39,13 @@ func (r *Router) LogIn(ctx *gin.Context) {
 		return
 	}
 
-	jwt, err := r.uc.SignInUser(ctx, payload.Name, payload.Password)
+	user, token, err := r.uc.SignInUser(ctx, payload.Name, payload.Password)
 
 	if err == nil {
-		ctx.JSON(http.StatusOK, jwt)
+		ctx.JSON(http.StatusOK, models.AuthResponse{
+			User:  user,
+			Token: token,
+		})
 		return
 	}
 

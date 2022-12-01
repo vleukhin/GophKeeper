@@ -51,7 +51,7 @@ const storeFileQuery = `
 `
 
 func (p Storage) AddFile(ctx context.Context, file models.File) error {
-	_, err := p.conn.Exec(ctx, storeFileQuery, file.ID, file.FileName, file.Meta)
+	_, err := p.conn.Exec(ctx, storeFileQuery, file.ID, file.Name, file.FileName, file.Meta)
 	return err
 }
 

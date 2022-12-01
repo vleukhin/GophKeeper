@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/vleukhin/GophKeeper/internal/client/console/files"
 	"log"
 	"time"
+
+	"github.com/vleukhin/GophKeeper/internal/client/console/files"
 
 	"github.com/vleukhin/GophKeeper/internal/client/console/creds"
 	"github.com/vleukhin/GophKeeper/internal/client/console/notes"
