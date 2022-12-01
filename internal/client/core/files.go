@@ -1,8 +1,10 @@
 package core
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/fatih/color"
@@ -12,21 +14,22 @@ import (
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
-func (c *Core) StoreFile(file models.File) {
-	file.ID = uuid.New()
+func (c *Core) StoreFile(file *os.File, name, filename string) {
+	storedFile := models.File{
+		ID:       uuid.UUID{},
+		Name:     name,
+		FileName: filename,
+	}
 	accessToken, err := c.authorisationCheck()
 	if err != nil {
 		return
 	}
-
-	c.encryptFile(c.cfg.EncryptKey, &file)
-	err = c.client.StoreFile(accessToken, file)
+	err = c.client.StoreFile(accessToken, storedFile, helpers.EncryptStream(c.cfg.EncryptKey, file))
 	if err != nil {
 		color.Red(err.Error())
 		return
 	}
-
-	err = c.storage.AddFile(context.Background(), file)
+	err = c.storage.AddFile(context.Background(), storedFile)
 	if err != nil {
 		color.Red(err.Error())
 		return
@@ -44,13 +47,20 @@ func (c *Core) GetFile(fileID, filePath string) {
 		color.Red(err.Error())
 		return
 	}
-	c.decryptFile(c.cfg.EncryptKey, &file)
-	yellow := color.New(color.FgYellow).SprintFunc()
-	err = os.WriteFile(filePath, file.Content, 0600)
+	out, err := os.OpenFile(filePath, os.O_CREATE|os.O_RDWR, os.ModePerm)
 	if err != nil {
 		color.Red(err.Error())
 		return
 	}
+
+	w := helpers.DecryptStream(c.cfg.EncryptKey, out)
+	_, err = io.Copy(w, bytes.NewBuffer(file.Content))
+	if err != nil {
+		color.Red(err.Error())
+		return
+	}
+
+	yellow := color.New(color.FgYellow).SprintFunc()
 	fmt.Printf("File saved to %s", yellow(filePath))
 }
 

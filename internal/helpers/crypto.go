@@ -63,3 +63,25 @@ func Decrypt(key, encryptedString string) (decryptedString string) {
 
 	return string(plainData)
 }
+
+func EncryptStream(key string, reader io.Reader) io.Reader {
+	block, err := aes.NewCipher([]byte(key))
+	if err != nil {
+		log.Fatalf("EncryptStream - NewCipher - %v", err)
+	}
+	var iv [aes.BlockSize]byte
+	stream := cipher.NewOFB(block, iv[:])
+
+	return &cipher.StreamReader{S: stream, R: reader}
+}
+
+func DecryptStream(key string, reader io.Writer) io.Writer {
+	block, err := aes.NewCipher([]byte(key))
+	if err != nil {
+		log.Fatalf("DecryptStream - NewCipher - %v", err)
+	}
+	var iv [aes.BlockSize]byte
+	stream := cipher.NewOFB(block, iv[:])
+
+	return &cipher.StreamWriter{S: stream, W: reader}
+}

@@ -3,10 +3,10 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
-
 	"github.com/go-resty/resty/v2"
 	"github.com/pkg/errors"
+	"io"
+	"net/http"
 
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
@@ -44,7 +44,7 @@ type NoteClient interface {
 
 type FilesClient interface {
 	GetFiles(accessToken string) ([]models.File, error)
-	StoreFile(accessToken string, note models.File) error
+	StoreFile(accessToken string, file models.File, writer io.Reader) error
 	DelFile(accessToken, fileID string) error
 }
 

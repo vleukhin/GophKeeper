@@ -31,14 +31,12 @@ Flags:
   example: -meta'[{"name":"some_meta","value":"some_meta_value"},{"name":"some_meta2","value":"some_meta_value2"}]'
   `,
 		Run: func(cmd *cobra.Command, args []string) {
-			content, err := os.ReadFile(filePath)
+			file, err := os.OpenFile(filePath, os.O_RDONLY, os.ModePerm)
 			if err != nil {
 				log.Fatal(err.Error())
 			}
 
-			newFile.Content = content
-			newFile.FileName = filepath.Base(filePath)
-			client.GetApp().StoreFile(newFile)
+			client.GetApp().StoreFile(file, newFile.Name, filepath.Base(filePath))
 		},
 	}
 

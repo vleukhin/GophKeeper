@@ -3,6 +3,7 @@ package core
 import (
 	"context"
 	"errors"
+	"os"
 
 	"github.com/fatih/color"
 
@@ -48,7 +49,7 @@ type (
 		DelCred(loginID string)
 	}
 	FilesService interface {
-		StoreFile(file models.File)
+		StoreFile(file *os.File, name, filename string)
 		GetFile(fileID, filePath string)
 		DelFile(fileID string)
 	}
