@@ -24,7 +24,7 @@ func (c *Core) StoreCard(card *models.Card) {
 		return
 	}
 
-	if err = c.storage.StoreCard(context.TODO(), *card); err != nil {
+	if err = c.storage.StoreCard(context.Background(), *card); err != nil {
 		log.Fatal(err)
 	}
 

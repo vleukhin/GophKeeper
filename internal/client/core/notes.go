@@ -20,7 +20,7 @@ func (c *Core) loadNotes(accessToken string) {
 		return
 	}
 
-	if err = c.storage.SaveNotes(context.TODO(), notes); err != nil {
+	if err = c.storage.SaveNotes(context.Background(), notes); err != nil {
 		log.Println(err)
 
 		return
@@ -39,7 +39,7 @@ func (c *Core) StoreNote(note *models.Note) {
 		log.Fatalf("Core - AddNote - %v", err)
 	}
 
-	if err = c.storage.AddNote(context.TODO(), *note); err != nil {
+	if err = c.storage.AddNote(context.Background(), *note); err != nil {
 		log.Fatal(err)
 	}
 
@@ -53,7 +53,7 @@ func (c *Core) ShowNote(noteID string) {
 
 		return
 	}
-	note, err := c.storage.GetNoteByID(context.TODO(), noteUUID)
+	note, err := c.storage.GetNoteByID(context.Background(), noteUUID)
 	if err != nil {
 		color.Red(err.Error())
 
@@ -70,12 +70,12 @@ func (c *Core) ShowNote(noteID string) {
 	)
 }
 
-func (c *Core) encryptNote(userPassword string, note *models.Note) {
-	note.Text = helpers.Encrypt(userPassword, note.Text)
+func (c *Core) encryptNote(key string, note *models.Note) {
+	note.Text = helpers.Encrypt(key, note.Text)
 }
 
-func (c *Core) decryptNote(userPassword string, note *models.Note) {
-	note.Text = helpers.Decrypt(userPassword, note.Text)
+func (c *Core) decryptNote(key string, note *models.Note) {
+	note.Text = helpers.Decrypt(key, note.Text)
 }
 
 func (c *Core) DelNote(noteID string) {
@@ -89,7 +89,7 @@ func (c *Core) DelNote(noteID string) {
 		log.Fatalf("Core - uuid.Parse - %v", err)
 	}
 
-	if err := c.storage.DelNote(context.TODO(), noteUUID); err != nil {
+	if err := c.storage.DelNote(context.Background(), noteUUID); err != nil {
 		log.Fatalf("Core - storage.DelNote - %v", err)
 	}
 

@@ -72,14 +72,14 @@ func (c *Core) ShowCred(loginID string) {
 	)
 }
 
-func (c *Core) encryptLogin(userPassword string, login *models.Cred) {
-	login.Login = helpers.Encrypt(userPassword, login.Login)
-	login.Password = helpers.Encrypt(userPassword, login.Password)
+func (c *Core) encryptLogin(key string, login *models.Cred) {
+	login.Login = helpers.Encrypt(key, login.Login)
+	login.Password = helpers.Encrypt(key, login.Password)
 }
 
-func (c *Core) decryptLogin(userPassword string, login *models.Cred) {
-	login.Login = helpers.Decrypt(userPassword, login.Login)
-	login.Password = helpers.Decrypt(userPassword, login.Password)
+func (c *Core) decryptLogin(key string, login *models.Cred) {
+	login.Login = helpers.Decrypt(key, login.Login)
+	login.Password = helpers.Decrypt(key, login.Password)
 }
 
 func (c *Core) DelCred(loginID string) {
@@ -92,7 +92,7 @@ func (c *Core) DelCred(loginID string) {
 		log.Fatalf("Core - uuid.Parse - %v", err)
 	}
 
-	if err := c.storage.DelCred(context.TODO(), loginUUID); err != nil {
+	if err := c.storage.DelCred(context.Background(), loginUUID); err != nil {
 		log.Fatalf("Core - storage.DelCred - %v", err)
 	}
 

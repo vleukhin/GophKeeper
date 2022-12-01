@@ -4,8 +4,6 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v4"
-
 	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
@@ -51,19 +49,4 @@ func (p Storage) GetAccessToken(ctx context.Context) (string, error) {
 		return "", err
 	}
 	return token, nil
-}
-
-const getUserQuery = `
-	SELECT id FROM users WHERE name = $1
-`
-
-func (p Storage) UserExists(ctx context.Context, name string) (bool, error) {
-	_, err := p.conn.Query(ctx, getUserQuery, name)
-	if err != nil {
-		if err != pgx.ErrNoRows {
-			return false, err
-		}
-		return false, nil
-	}
-	return true, nil
 }
