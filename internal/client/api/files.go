@@ -1,8 +1,9 @@
 package api
 
 import (
-	"github.com/vleukhin/GophKeeper/internal/models"
 	"io"
+
+	"github.com/vleukhin/GophKeeper/internal/models"
 )
 
 const filesEndpoint = "api/files"

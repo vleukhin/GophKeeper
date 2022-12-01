@@ -3,10 +3,11 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-resty/resty/v2"
-	"github.com/pkg/errors"
 	"io"
 	"net/http"
+
+	"github.com/go-resty/resty/v2"
+	"github.com/pkg/errors"
 
 	"github.com/vleukhin/GophKeeper/internal/models"
 )

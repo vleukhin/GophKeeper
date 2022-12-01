@@ -23,7 +23,9 @@ func (c *Core) SignUpUser(ctx context.Context, name, password string) (models.Us
 		return user, models.JWT{}, errors.New("user already exists")
 	}
 	user, err = c.repo.AddUser(ctx, name, password)
-
+	if err != nil {
+		return user, models.JWT{}, err
+	}
 	token, err := c.createToken(user)
 	if err != nil {
 		return user, token, err

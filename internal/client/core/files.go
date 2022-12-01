@@ -87,11 +87,3 @@ func (c *Core) DelFile(fileID string) {
 
 	color.Green("Card %q removed", fileID)
 }
-
-func (c *Core) encryptFile(key string, file *models.File) {
-	file.Content = []byte(helpers.Encrypt(key, string(file.Content)))
-}
-
-func (c *Core) decryptFile(key string, file *models.File) {
-	file.Content = []byte(helpers.Decrypt(key, string(file.Content)))
-}
