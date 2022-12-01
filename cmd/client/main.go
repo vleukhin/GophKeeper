@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/vleukhin/GophKeeper/internal/client/console/files"
 	"log"
 	"time"
 
@@ -47,6 +48,9 @@ func main() {
 		notes.StoreNote,
 		notes.GetNote,
 		notes.DelNote,
+		files.NewStoreCommand(),
+		files.NewGetCommand(),
+		files.NewDeleteCommand(),
 	}
 
 	rootCmd.AddCommand(commands...)

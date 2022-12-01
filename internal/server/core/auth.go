@@ -3,7 +3,9 @@ package core
 import (
 	"context"
 	"errors"
+
 	"github.com/rs/zerolog/log"
+
 	"github.com/vleukhin/GophKeeper/internal/helpers"
 	"github.com/vleukhin/GophKeeper/internal/models"
 
