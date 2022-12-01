@@ -8,3 +8,8 @@ type LoginPayload struct {
 type ErrMessage struct {
 	Message string `json:"error"`
 }
+
+type RegisterResponse struct {
+	User  User `json:"user"`
+	Token JWT  `json:"token"`
+}

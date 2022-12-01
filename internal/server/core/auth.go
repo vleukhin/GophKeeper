@@ -12,50 +12,33 @@ import (
 
 const minutesPerHour = 60
 
-func (c *Core) SignUpUser(ctx context.Context, name, password string) (user models.User, err error) {
-	user, err = c.repo.GetUserByName(ctx, name)
+func (c *Core) SignUpUser(ctx context.Context, name, password string) (models.User, models.JWT, error) {
+	user, err := c.repo.GetUserByName(ctx, name)
 	if err != nil {
-		return
+		return user, models.JWT{}, err
 	}
-	if user.Name != "" {
-		return user, errors.New("user already exists")
+	if !helpers.IsEmptyUUID(user.ID) {
+		return user, models.JWT{}, errors.New("user already exists")
 	}
-	return c.repo.AddUser(ctx, name, password)
+	user, err = c.repo.AddUser(ctx, name, password)
+	token, err := c.createToken(user)
+	if err != nil {
+		return user, token, err
+
+	}
+	return user, token, nil
 }
 
-func (c *Core) SignInUser(ctx context.Context, email, password string) (token models.JWT, err error) {
+func (c *Core) SignInUser(ctx context.Context, email, password string) (models.JWT, error) {
 	user, err := c.repo.GetUserByName(ctx, email)
 	if err != nil {
-		return
+		return models.JWT{}, err
+	}
+	if helpers.IsEmptyUUID(user.ID) {
+		return models.JWT{}, errors.New("user not found")
 	}
 
-	err = helpers.VerifyPassword(user.Password, password)
-	if err != nil {
-		return
-	}
-
-	token.AccessToken, err = helpers.CreateToken(
-		c.cfg.Security.AccessTokenExpiresIn,
-		user.ID,
-		c.cfg.Security.AccessTokenPrivateKey)
-	if err != nil {
-		return
-	}
-
-	token.RefreshToken, err = helpers.CreateToken(
-		c.cfg.Security.RefreshTokenExpiresIn,
-		user.ID,
-		c.cfg.Security.RefreshTokenPrivateKey)
-
-	if err != nil {
-		return
-	}
-
-	token.AccessTokenMaxAge = c.cfg.Security.AccessTokenMaxAge
-	token.RefreshTokenMaxAge = c.cfg.Security.RefreshTokenMaxAge
-	token.Domain = c.cfg.Security.Domain
-
-	return token, nil
+	return c.createToken(user)
 }
 
 func (c *Core) RefreshAccessToken(ctx context.Context, refreshToken string) (token models.JWT, err error) {
@@ -107,4 +90,32 @@ func (c *Core) CheckAccessToken(ctx context.Context, accessToken string) (models
 	}
 
 	return user, nil
+}
+
+func (c *Core) createToken(user models.User) (models.JWT, error) {
+	var token models.JWT
+	var err error
+
+	token.AccessToken, err = helpers.CreateToken(
+		c.cfg.Security.AccessTokenExpiresIn,
+		user.ID,
+		c.cfg.Security.AccessTokenPrivateKey)
+	if err != nil {
+		return token, err
+	}
+
+	token.RefreshToken, err = helpers.CreateToken(
+		c.cfg.Security.RefreshTokenExpiresIn,
+		user.ID,
+		c.cfg.Security.RefreshTokenPrivateKey)
+
+	if err != nil {
+		return token, err
+	}
+
+	token.AccessTokenMaxAge = c.cfg.Security.AccessTokenMaxAge
+	token.RefreshTokenMaxAge = c.cfg.Security.RefreshTokenMaxAge
+	token.Domain = c.cfg.Security.Domain
+
+	return token, nil
 }

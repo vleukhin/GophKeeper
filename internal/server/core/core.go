@@ -13,8 +13,8 @@ import (
 
 type GophKeeperServer interface {
 	HealthCheck(context.Context) error
-	SignUpUser(ctx context.Context, email, password string) (models.User, error)
-	SignInUser(ctx context.Context, email, password string) (models.JWT, error)
+	SignUpUser(ctx context.Context, name, password string) (models.User, models.JWT, error)
+	SignInUser(ctx context.Context, name, password string) (models.JWT, error)
 	RefreshAccessToken(ctx context.Context, refreshToken string) (models.JWT, error)
 	GetDomainName() string
 	CheckAccessToken(ctx context.Context, accessToken string) (models.User, error)

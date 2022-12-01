@@ -84,12 +84,8 @@ func (m MockStorage) MigrateDB(context.Context) error {
 	return nil
 }
 
-func (m MockStorage) AddUser(ctx context.Context, name string, password string) (models.User, error) {
+func (m MockStorage) AddUser(ctx context.Context, name string, token models.JWT) (models.User, error) {
 	return models.User{}, nil
-}
-
-func (m MockStorage) UpdateUserToken(ctx context.Context, user models.User, token models.JWT) error {
-	return nil
 }
 
 func (m MockStorage) DropUser(context.Context) error {
@@ -97,14 +93,6 @@ func (m MockStorage) DropUser(context.Context) error {
 }
 
 func (m MockStorage) GetAccessToken(context.Context) (string, error) {
-	return "", nil
-}
-
-func (m MockStorage) UserExists(ctx context.Context, name string) (bool, error) {
-	return false, nil
-}
-
-func (m MockStorage) GetUserPasswordHash(context.Context) (string, error) {
 	return "", nil
 }
 

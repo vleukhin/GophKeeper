@@ -19,12 +19,9 @@ type Repo interface {
 }
 
 type UserRepo interface {
-	AddUser(ctx context.Context, name string, password string) (models.User, error)
-	UpdateUserToken(ctx context.Context, user models.User, token models.JWT) error
+	AddUser(ctx context.Context, name string, token models.JWT) (models.User, error)
 	DropUser(ctx context.Context) error
 	GetAccessToken(ctx context.Context) (string, error)
-	UserExists(ctx context.Context, name string) (bool, error)
-	GetUserPasswordHash(ctx context.Context) (string, error)
 }
 
 type CardStorage interface {

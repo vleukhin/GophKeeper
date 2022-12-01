@@ -16,18 +16,21 @@ func (r *Router) Register(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindJSON(&payload); err != nil {
 		errorResponse(ctx, http.StatusBadRequest, err.Error())
-
 		return
 	}
 
-	user, err := r.uc.SignUpUser(ctx, payload.Name, payload.Password)
-	if err == nil {
-		ctx.JSON(http.StatusOK, user)
-
+	user, token, err := r.uc.SignUpUser(ctx, payload.Name, payload.Password)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	ctx.JSON(http.StatusOK, models.RegisterResponse{
+		User:  user,
+		Token: token,
+	})
+	return
+
 }
 
 func (r *Router) LogIn(ctx *gin.Context) {

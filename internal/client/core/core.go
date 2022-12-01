@@ -28,8 +28,8 @@ type (
 	}
 
 	AuthService interface {
-		Register(user models.User)
-		Login(user models.User)
+		Register(name, password string)
+		Login(name, password string)
 		Logout()
 	}
 	CardsService interface {
@@ -83,7 +83,7 @@ var (
 )
 
 func (c *Core) Sync() {
-	token, err := c.storage.GetAccessToken(context.TODO())
+	token, err := c.storage.GetAccessToken(context.Background())
 	if err != nil {
 		color.Red("Internal error: %v", err)
 
@@ -95,7 +95,7 @@ func (c *Core) Sync() {
 }
 
 func (c *Core) authorisationCheck() (string, error) {
-	accessToken, err := c.storage.GetAccessToken(context.TODO())
+	accessToken, err := c.storage.GetAccessToken(context.Background())
 	if err != nil || accessToken == "" {
 		color.Red("User should be logged")
 

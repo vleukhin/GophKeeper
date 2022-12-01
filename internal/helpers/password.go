@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -17,4 +18,8 @@ func HashPassword(password string) (string, error) {
 
 func VerifyPassword(hashedPassword, candidatePassword string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(candidatePassword))
+}
+
+func IsEmptyUUID(uuid uuid.UUID) bool {
+	return uuid.ID() == 0
 }

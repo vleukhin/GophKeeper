@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS  users
 (
     id       uuid not null constraint users_pk primary key,
     name     varchar,
-    password varchar,
 	access_token varchar,
 	refresh_token varchar
 );
